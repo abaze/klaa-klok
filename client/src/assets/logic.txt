@@ -1,0 +1,7 @@
+Déroulement d'une partie : 
+
+Commencement : 
+- Si tous les players sont connectés alors :
+	- on affiche un bouton DEMARRER
+		- si TOUS les joueurs ont cliqués dessus (le clic change leur statut en isReady à true)
+			- le Store lance une new partie (numéro de partie ++, startChrono, etc)
