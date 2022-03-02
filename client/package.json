@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service start",    
     "build": "vue-cli-service build",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint"
