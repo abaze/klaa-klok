@@ -15,7 +15,7 @@
     </template>
     <!-- ECRAN SUIVANTS -->
     <template v-else-if="choixPlayer !== 'home' && choixPlayer">
-      <form @submit.prevent="sendGameForm">
+      <form @submit.prevent="sendGameForm" autocomplete="off">
         <!-- ECRAN NEW SALON -->
         <template v-if="choixPlayer === 'new-salon'">
           <p>
@@ -105,6 +105,7 @@
             maxlength="20"
             :readonly="loaderSave"
             ref="input_username"
+            autocomplete="off"
           />
 
           <button
