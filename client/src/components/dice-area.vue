@@ -116,7 +116,7 @@ export default {
       }
     },
     "player.isReady": function () {
-      // Des que notre statut Ready change, on le send aux autres players
+      // Si statut Ready change, on le send aux autres players
       // on send le player + l'id Room
       SocketIO.emit("my_player_update_ready", {
         id: this.game.roomId,

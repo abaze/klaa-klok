@@ -30,7 +30,7 @@ export default {
     notifications: {
       deep: true,
       handler(notifs) {
-        if (notifs) {
+        if (notifs.length > 0) {
           this.list_notifications = notifs;
           this.audioNotif.volume = 0.5;
           this.audioNotif.play();
@@ -76,12 +76,13 @@ export default {
     align-items: center;
     justify-content: center;
     color: var(--purple);
-    font-size: 0.7rem;
+    font-size: 1.2rem;
     font-weight: 300;
     border-radius: 15px;
     padding: 1rem;
     margin: 0.5rem auto;
-    color: #fff;
+    border: 3px solid;
+    background-color: #fff;
     box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
     &.close {
       animation: closeNotif 1s linear 2s forwards;
@@ -96,10 +97,12 @@ export default {
       }
     }
     &.good {
-      background-color: var(--green);
+      border-color: var(--green);
+      color: var(--green);
     }
     &.bad {
-      background-color: var(--red);
+      border-color: var(--red);
+      color: var(--red);
     }
   }
 }

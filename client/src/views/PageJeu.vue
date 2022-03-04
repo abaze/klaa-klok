@@ -88,19 +88,19 @@ export default {
   created() {
     this.$nextTick(() => {
       // ETAPE-1 : On signale au BACK qu'on vient d'arriver dans la room
-      SocketIO.emit("player_request_init_room_data", this.game.roomId);
-      // ETAPE-2 : le BACK nous envoie toutes les données de cette room (les options, les joueurs dispos)
-      SocketIO.on("receive_init_room_data", ({ id, data }) => {
-        // si la reponse concerne le roomId de notre page de jeu alors
-        if (this.game.roomId === id) {
+      SocketIO.emit(
+        "player_request_init_room_data",
+        this.game.roomId,
+        (response) => {
+          // ETAPE-2 : le BACK nous envoie toutes les données de cette room (les options, les joueurs dispos)
           // si il y a des datas alors on fait tous les storages
-          if (data) {
+          if (response.data) {
             // on lance la musique dambiance
             this.audioGame.volume = 0.25;
             this.audioGame.loop = true;
             this.audioGame.play();
             // on STORE toute la data pour INIT notre game
-            this.initGame(data);
+            this.initGame(response.data);
             // on va determiner une class pour notre joueur (pour pouvoir lui donner une couleur fixe)
             const prefix = "player-";
             const order = this.playersList.length + 1;
@@ -111,16 +111,29 @@ export default {
             // quiALaMain retourne game.playersList[0]
             this.setMainPlayer(this.quiALaMain);
             // on previent le BACK de nous stocker (pour que les autres joueurs puissent nous récupérer d leur arrivée)
-            SocketIO.emit("send_my_player", {
-              id: this.game.roomId,
-              data: this.player,
-            });
+            SocketIO.emit(
+              "send_my_player",
+              {
+                id: this.game.roomId,
+                data: this.player,
+              },
+              (response) => {
+                if (response) {
+                  this.notif.msg = response.msg;
+                  this.notif.label = "good";
+                  this.addNotification(this.notif);
+                }
+              }
+            );
           } else {
             // si pas de data (donc pas de roomId existant) on redirige vers une page 404
-            this.router.push({ path: "/notfound", params: { wrongPath: id } });
+            this.router.push({
+              path: "/notfound",
+              params: { wrongPath: response.id },
+            });
           }
         }
-      });
+      );
 
       // ETAPE-3 : si un autre player, que moi, arrive, on lui met dans son STORE et on affiche une notif
       SocketIO.on("new_player_is_coming", ({ id, data }) => {

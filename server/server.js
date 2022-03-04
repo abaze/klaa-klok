@@ -3,11 +3,15 @@ const express = require("express");
 const socketio = require("socket.io");
 const cors = require("cors");
 
+const PORT = process.env.PORT || 3000;
+const router = require("./router");
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
 app.use(cors());
+app.use(router);
 
 // array qui va stocker les rooms et les players qui y participent
 // on se calque sur les var du store/game en Front
@@ -27,7 +31,6 @@ Schema d'une room :
 let rooms = [];
 
 io.on("connection", function (socket) {
-  socket.sendBuffer = [];
   // des l'arrivée du player sur le site
   // on transmet l'id de session au front
   socket.emit("new_connection", socket.id);
@@ -45,39 +48,48 @@ io.on("connection", function (socket) {
     rooms.push(room);
     // on stock l'id room (pour pouvoir verifier rapidement les rooms dispo)
     roomsIdAvailable.push(room.roomId);
+    // on push le player dans la room socket
+    socket.join(room.roomId);
   });
 
   // ETAPE 1b - FRONT nous demande si code salon existe
   socket.on("verife_code_salon", (code) => {
     const isExist = roomsIdAvailable.includes(code);
     socket.emit("is_code_salon_exist", { id: code, data: isExist });
-  });
-
-  // ETAPE 2 - FRONT nous signale qu'il vient d'arriver dans la room de jeu
-  socket.on("player_request_init_room_data", (roomId) => {
-    // on recupere la data du tableau rooms
-    const room = rooms.filter((room) => room.roomId === roomId)[0] || false;
-    if (room) {
-      // on EMIT tout au Front
-      socket.emit("receive_init_room_data", { id: room.roomId, data: room });
-      console.log("on envoie la room suivant : ", room.roomId);
-    } else {
-      // si pas de salon existant on renvoi false
-      console.log("cette room suivante nexiste pas : ", roomId);
-      socket.emit("receive_init_room_data", { id: roomId, data: false });
+    if (isExist) {
+      socket.join(code);
     }
   });
 
+  // ETAPE 2 - FRONT nous signale qu'il vient d'arriver dans la room de jeu
+  socket.on("player_request_init_room_data", (roomId, callback) => {
+    // on recupere la data du tableau rooms
+    const room = rooms.filter((room) => room.roomId === roomId)[0] || false;
+
+    // on EMIT tout au Front
+    socket.emit("receive_init_room_data", { id: room.roomId, data: room });
+    callback({
+      id: room.roomId || null,
+      data: room || null,
+    });
+    console.log("on envoie la room suivant : ", room.roomId || null);
+  });
+
   // ETAPE 3 - FRONT le player se rajoute à la liste des players de la room
-  socket.on("send_my_player", ({ id, data }) => {
+  socket.on("send_my_player", ({ id, data }, callback) => {
     console.log("Un joueur veut être stocker dans le BACK");
     // on va stocker ce joueur dans notre tableau rooms
     rooms.forEach((room) => {
       // une fois la room trouvée, on push notre player dans la playersList
       if (room.roomId === id) {
         room.playersList.push(data);
-        // on BROADCAST aux joueurs déjà connectés qu'un new player est à ajouter
-        socket.broadcast.emit("new_player_is_coming", { id, data });
+        callback({
+          msg: `Bienvenue à vous ${data.name} !`,
+        });
+        // on BROADCAST aux joueurs de la room déjà connectés qu'un new player est à ajouter
+        socket.broadcast
+          .to(room.roomId)
+          .emit("new_player_is_coming", { id, data });
         console.log("Liste participants : ", room.playersList);
       }
     });
@@ -92,9 +104,8 @@ io.on("connection", function (socket) {
   socket.on("my_player_update_ready", ({ id, data }) => {
     const playerReady = data;
     const roomId = id;
-    console.log(
-      `${playerReady.name} de la room ${roomId} a son ready à ${playerReady.isReady} !`
-    );
+
+    //console.log(`${playerReady.name} de la room ${roomId} a son ready à ${playerReady.isReady} !`);
 
     // on isole la bonne room
     rooms.forEach((room) => {
@@ -103,23 +114,25 @@ io.on("connection", function (socket) {
         room.playersList.forEach((player, indexPlayer) => {
           if (player.id === playerReady.id) {
             room.playersList[indexPlayer] = playerReady;
+
+            // on broadcast les data du player
+            socket.broadcast
+              .to(roomId)
+              .emit("one_player_update_ready", { id, data: playerReady });
           }
         });
       }
     });
-
-    // on broadcast les data du player
-    socket.broadcast.emit("one_player_update_ready", { id, data: playerReady });
   });
 
   // ETAPE 2 - GESTION DES MISES
   // Quand un player vient de miser, on broadcast aux autres players
   socket.on("player_mised", ({ id, data }) => {
-    socket.broadcast.emit("send_mise_adverse", { id, data });
+    socket.broadcast.to(id).emit("send_mise_adverse", { id, data });
   });
   // Quand un player vient de remove une de ses mises, on broadcast aux autres players
   socket.on("player_removed_mise", ({ id, data }) => {
-    socket.broadcast.emit("send_remove_mise_adverse", { id, data });
+    socket.broadcast.to(id).emit("send_remove_mise_adverse", { id, data });
   });
 
   // ETAPE 3 - GESTION DU LANCER DE DES
@@ -131,7 +144,7 @@ io.on("connection", function (socket) {
       `BACK : le mainPlayer nous envoie ces random : ${data.face1} et ${data.face2}`
     );
     // on les send direct aux autres player pour qu'ils aient le mm resultat
-    socket.broadcast.emit("send_dices_faces", {
+    socket.broadcast.to(id).emit("send_dices_faces", {
       id,
       data: {
         face1: data.face1,
@@ -151,7 +164,7 @@ io.on("connection", function (socket) {
       data
     );
     // on le broadcast aux autres
-    socket.broadcast.emit("receive_oponent_gains", { id, data });
+    socket.broadcast.to(id).emit("receive_oponent_gains", { id, data });
     console.log(`On broadcast ces gains : `, data);
   });
 
@@ -163,7 +176,7 @@ io.on("connection", function (socket) {
           console.log("liste avant : ", rooms[indexRoom].playersList);
           console.log(`${player.name} vient de partir !`);
           // on broadcast aux autres players l'id du player à supprimer de leur liste
-          socket.broadcast.emit("player_leave", {
+          socket.broadcast.to(room.roomId).emit("player_leave", {
             id: rooms[indexRoom].roomId,
             data: player,
           });
@@ -192,6 +205,4 @@ io.on("connection", function (socket) {
   //   });
 });
 
-server.listen(process.env.PORT || 5000, () =>
-  console.log(`Server has started.`)
-);
+server.listen(PORT, () => console.log(`Server has started on PORT ${PORT}`));
