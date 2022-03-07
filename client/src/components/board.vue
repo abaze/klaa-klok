@@ -219,7 +219,7 @@ export default {
           font-size: 0.6rem;
         }
 
-        &.player-1 {
+        &:first-child {
           top: 0;
           left: 50%;
           transform: translateY(-30%) translateX(-50%);
@@ -230,7 +230,7 @@ export default {
             }
           }
         }
-        &.player-2 {
+        &:nth-child(2) {
           top: 25%;
           right: 0;
           transform: translate(0, -50%) rotate(57deg);
@@ -241,22 +241,22 @@ export default {
             }
           }
         }
-        &.player-3 {
+        &:nth-child(3) {
           bottom: 25%;
           right: 0;
           transform: translate(5%, 25%) rotate(305deg);
         }
-        &.player-4 {
+        &:nth-child(4) {
           left: 50%;
           bottom: 0%;
           transform: translate(-50%, 25%);
         }
-        &.player-5 {
+        &:nth-child(5) {
           bottom: 0;
           left: 15%;
           transform: translate(-50%, -50%) rotate(50deg);
         }
-        &.player-6 {
+        &:nth-child(6) {
           top: 25%;
           left: 15%;
           transform: translate(-50%, -50%) rotate(-55deg);

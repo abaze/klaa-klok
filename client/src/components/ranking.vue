@@ -36,7 +36,9 @@ export default {
 .ranking {
   grid-area: ranking;
   background-color: var(--purple);
+  counter-reset: ranking;
   .card {
+    position: relative;
     display: flex;
     width: 100%;
     align-items: center;
@@ -45,6 +47,17 @@ export default {
     padding: 0.5rem;
     border-radius: 5px;
     border-bottom: 4px solid #fff;
+    overflow: hidden;
+
+    &:before {
+      position: absolute;
+      font-style: italic;
+      font-weight: 800;
+      opacity: 0.4;
+      font-size: 5rem;
+      counter-increment: ranking;
+      content: counter(ranking) " ";
+    }
   }
 }
 </style>
