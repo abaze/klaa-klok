@@ -193,6 +193,8 @@ export default {
           { id: player.id, field: "totalGains", value: currentTotalGains },
           { root: true }
         );
+        // on remet le statut ready à false pour chaque player
+        dispatch("setPlayerIsReady", { value: false, player });
 
         // si on loop sur notre profil, on maj le store
         if (player.id === state.player.id) {

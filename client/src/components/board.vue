@@ -285,6 +285,7 @@ export default {
         pointer-events: none;
         cursor: default;
         animation: none;
+        opacity: 0.5;
       }
     }
   }
