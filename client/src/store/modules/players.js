@@ -41,14 +41,6 @@ export default {
     SET_CURRENT_MISE(state, mise) {
       state.player.currentMise = mise;
     },
-    // gains de la partie terminee (pour le resumé des resultats)
-    SET_GAINS_PARTIE(state, gains) {
-      state.player.gainsPartie = gains;
-    },
-    // pertes de la partie terminee (pour le resumé des resultats)
-    SET_PERTES_PARTIE(state, lose) {
-      state.player.pertesPartie = lose;
-    },
     // gains totals toutes parties confondues
     SET_TOTAL_GAINS(state, gains) {
       state.player.totalGains = gains;
@@ -94,8 +86,6 @@ export default {
     },
     resetCurrentMises({ commit }) {
       commit("SET_CURRENT_MISE", 0);
-      commit("SET_GAINS_PARTIE", 0);
-      commit("SET_PERTES_PARTIE", 0);
     },
     addPlayerGains({ commit }, playerGains) {
       commit("ADD_PLAYERS_GAINS", playerGains);
@@ -113,34 +103,31 @@ export default {
       // on store la mise courante
       commit("SET_CURRENT_MISE", currentMise);
     },
-    // On calcul les gains de NOTRE player
-    // les autres vont Broadcaster leur restulat qu'on get par la suite
-    calculGains({ state, rootState, commit, dispatch }) {
-      // on recupere une copy de notre total de gains
-      const player = JSON.parse(JSON.stringify(state.player));
-      let username = player.name;
-      let id = player.id;
-      let currentMise = player.currentMise;
-      /*let gainsPartie = player.gainsPartie;
-      let pertesPartie = player.pertesPartie;*/
-      let totalGains = player.totalGains;
-
-      // toutes les mises de la partie qui vient de se terminer
-      const allMises = rootState.mises.misesByPlayer;
-
+    // On calcul les gains des joueurs en fonction de leurs mises
+    calculGains({ state, commit, rootState, dispatch }) {
       // les 2 faces des dès de la partie qui vient de se terminer
       const chosenFaces = rootState.dices.chosenFaces;
-
-      // on recupère nos mises
-      const mises = allMises.filter((mise) => mise.player.id === id) || {};
-
-      // si on a des mises alors
-      if (mises.length) {
-        // calcul de nos gains
-        let moneyWin = 0;
-        let moneyLost = 0;
-
-        mises.forEach((mise) => {
+      // on get toutes les mises
+      const all_mises = rootState.mises.misesByPlayer;
+      // on get tous les players de la game (on fait une copy non reactive)
+      const players = JSON.parse(
+        JSON.stringify(rootState.games.game.playersList)
+      );
+      // on loop chaque player pour attribution des gains
+      players.forEach((player, indexPlayer) => {
+        // on get les mises par joueur à chaque loop
+        const misesOfPlayer = all_mises.filter(
+          (mise) => mise.player.id === player.id
+        );
+        // on get largent total misé par le player
+        const monneyBet = all_mises
+          .filter((mise) => mise.player.id === player.id)
+          .map((mise) => mise.mise)
+          .reduce((tmise, mise) => tmise + mise, 0);
+        let moneyWin = 0,
+          moneyLost = 0;
+        // on loop sur chaque mise du player
+        misesOfPlayer.forEach((mise) => {
           // si notre mise a la mm face que le des 1
           if (mise.face === chosenFaces[0]) {
             moneyWin += mise.mise;
@@ -155,47 +142,65 @@ export default {
           }
         });
 
-        // En se basant sur la data copier du STORE (sans reactivité)
-        // on calcul le gain total
-        let gainsTotal = totalGains;
+        // on get le total de gains actuel du state (game.playersList.totalGains)
+        let currentTotalGains = JSON.parse(
+          JSON.stringify(
+            rootState.games.game.playersList[indexPlayer].totalGains
+          )
+        );
+        // on calcul le solde restant :  total - la mise
+        currentTotalGains -= monneyBet;
+        // calcul des gains générés
+        const totalGains = monneyBet + (moneyWin - moneyLost);
+        // on reattribue tout au total
+        currentTotalGains += totalGains;
 
-        // on déduit la mise du gain total
-        gainsTotal -= currentMise;
-
-        // calcul du gain au final
-        let finalGain = currentMise + (moneyWin - moneyLost);
-
-        // on ajoute les gains au gains total du state
-        gainsTotal += finalGain;
-
-        // si gainsTotal est inferieur à 0 on met 0
-        gainsTotal = gainsTotal >= 0 ? gainsTotal : 0;
-
-        // on maj notre STORE
-        commit("SET_GAINS_PARTIE", moneyWin);
-        commit("SET_PERTES_PARTIE", moneyLost);
-        commit("SET_TOTAL_GAINS", gainsTotal);
-
+        // si au final on a tout perdu (ou total < 0), on init totalGains à 0
         // si notre player n'a plus d'argent on le met en gameOver
-        if (gainsTotal === 0) {
-          commit("SET_PLAYER_IS_GAME_OVER", true);
+        if (currentTotalGains <= 0) {
+          currentTotalGains = 0;
+          // on set le GameOver pour le joueur dans game.playersList
+          dispatch(
+            "games/majOneFieldPlayersList",
+            { id: player.id, field: "gameOver", value: true },
+            { root: true }
+          );
+
+          // si on loop sur notre profil, on maj le store egalement
+          if (player.id === state.player.id) {
+            commit("SET_PLAYER_IS_GAME_OVER", true);
+          }
         }
 
         // On push dans playersGains du STORE
         const playerGains = {
           player: {
-            username,
-            id,
+            name: player.name,
+            id: player.id,
           },
-          mise: currentMise,
+          mise: monneyBet,
+          detailMises: misesOfPlayer,
           gains: moneyWin,
           pertes: moneyLost,
-          totalGains: gainsTotal,
+          totalGains: currentTotalGains,
         };
         // cest le classement qu'affichera la popup
         commit("ADD_PLAYERS_GAINS", playerGains);
-      }
-      // on affiche la popup des restultas
+
+        // on met à jour les infos du joueur dans game.playersList
+        dispatch(
+          "games/majOneFieldPlayersList",
+          { id: player.id, field: "totalGains", value: currentTotalGains },
+          { root: true }
+        );
+
+        // si on loop sur notre profil, on maj le store
+        if (player.id === state.player.id) {
+          commit("SET_TOTAL_GAINS", currentTotalGains);
+        }
+      });
+
+      // on affiche la popup des resultats
       const dataToOverlay = {
         action: "results",
         data: true,

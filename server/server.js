@@ -156,18 +156,6 @@ io.on("connection", function (socket) {
     );
   });
 
-  // ETAPE 4 - MAJ DES GAINS EN LIVE
-  // le Front nous envoie ses gains
-  socket.on("send_my_gains", ({ id, data }) => {
-    console.log(
-      `${data.player.username} vient de nous envoyer son gain : `,
-      data
-    );
-    // on le broadcast aux autres
-    socket.broadcast.to(id).emit("receive_oponent_gains", { id, data });
-    console.log(`On broadcast ces gains : `, data);
-  });
-
   // ETAPE - DECONNEXION
   socket.on("disconnect", () => {
     rooms.forEach((room, indexRoom) => {

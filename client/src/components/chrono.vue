@@ -50,7 +50,6 @@ export default {
     "game.gameIsReady": {
       deep: true,
       handler(value) {
-        console.log("game is ready : ", value);
         if (value) {
           this.startChrono();
           // on lance la musique de fond
@@ -65,7 +64,6 @@ export default {
     },
     "chrono.chronoIsFinish": function (isFinish) {
       if (isFinish) {
-        console.log("on joue Alarme");
         this.audioTimer.pause();
         this.audioTimer.currentTime = 0;
         this.audioAlarm.volume = 0.1;

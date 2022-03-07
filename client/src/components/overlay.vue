@@ -40,24 +40,48 @@
         <template v-else-if="dataToOverlay.action === 'results'">
           <div class="results">
             <h1>Résultats de la Partie {{ game.gameNumber }}</h1>
-            <p class="header" v-if="playersGains">
-              <span>Joueurs</span>
-              <span>Mises</span>
-              <span>Gains</span>
-              <span>Pertes</span>
-              <span>Soldes</span>
-            </p>
-            <p
-              v-for="score in playersGains"
-              :key="score.player.id"
-              :class="{ active: player.id === score.player.id }"
-            >
-              <span>{{ score.player.username }}</span>
-              <span>{{ score.mise }} €</span>
-              <span class="gains">+ {{ score.gains }} €</span>
-              <span class="pertes">- {{ score.pertes }} €</span>
-              <span>{{ score.totalGains }} €</span>
-            </p>
+            <div class="dices-faces">
+              <span
+                v-for="face in dicesFaces"
+                class="face"
+                :class="face"
+                :key="'dice-' + face"
+              ></span>
+            </div>
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Joueurs</th>
+                  <th>Mises</th>
+                  <th>Gains</th>
+                  <th>Pertes</th>
+                  <th>Soldes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="score in playersGains"
+                  :key="score.player.id"
+                  class="result-line"
+                  :class="{ active: player.id === score.player.id }"
+                >
+                  <td>{{ score.player.name }}</td>
+                  <td class="detail-mises">
+                    <span
+                      v-for="mise in score.detailMises"
+                      :key="mise.face + '-' + player.id"
+                    >
+                      <span class="mise-face" :class="mise.face"></span>
+                      <span class="mise-money">{{ mise.mise }} €</span>
+                    </span>
+                  </td>
+                  <td class="gains">+ {{ score.gains }} €</td>
+                  <td class="pertes">- {{ score.pertes }} €</td>
+                  <td>{{ score.totalGains }} €</td>
+                </tr>
+              </tbody>
+            </table>
+
             <input
               class="btn"
               type="button"
@@ -124,6 +148,7 @@ export default {
       game: (state) => state.games.game,
       player: (state) => state.players.player,
       playersGains: (state) => state.players.playersGains,
+      dicesFaces: (state) => state.dices.chosenFaces,
     }),
     ...mapGetters({
       isAWinner: "games/isAWinner",
@@ -161,14 +186,6 @@ export default {
             this.$refs.input_mise.focus();
           }
         });
-      }
-
-      if (value === "results") {
-        if (this.playersGains.length) {
-          const gains = JSON.parse(JSON.stringify(this.playersGains[0]));
-          // on Broadcast nos gains aux autres et on reçoit les leurs aussi
-          SocketIO.emit("send_my_gains", { id: this.game.roomId, data: gains });
-        }
       }
     },
     isGameOver(isGameOver) {
@@ -246,29 +263,6 @@ export default {
       this.newPartie();
     },
   },
-  mounted() {
-    // Quand un player send ses gains, on les reçoit ici
-    SocketIO.on("receive_oponent_gains", ({ id, data }) => {
-      if (this.game.roomId === id) {
-        // on lajoute au STORE pour laffichage popup
-        this.addPlayerGains(data);
-        // on ajoute maj le totalGains du joueur dans game.playersList (pour le classement général)
-        this.majOneFieldPlayersList({
-          id: data.player.id,
-          field: "totalGains",
-          value: data.totalGains,
-        });
-        // si le player n'a plus d'argent on le met en game over egalement
-        if (data.totalGains === 0) {
-          this.majOneFieldPlayersList({
-            id: data.player.id,
-            field: "gameOver",
-            value: true,
-          });
-        }
-      }
-    });
-  },
 };
 </script>
 
@@ -294,6 +288,25 @@ export default {
     to {
       opacity: 1;
     }
+  }
+
+  .tiger {
+    background-image: $tiger;
+  }
+  .pumpkin {
+    background-image: $pumpkin;
+  }
+  .fish {
+    background-image: $fish;
+  }
+  .crab {
+    background-image: $crab;
+  }
+  .chicken {
+    background-image: $chicken;
+  }
+  .shrimp {
+    background-image: $shrimp;
   }
 
   .close-btn {
@@ -325,25 +338,6 @@ export default {
       border: 5px solid rgb(240, 109, 1);
       border-radius: 50%;
       margin-bottom: 1rem;
-
-      &.tiger {
-        background-image: $tiger;
-      }
-      &.pumpkin {
-        background-image: $pumpkin;
-      }
-      &.fish {
-        background-image: $fish;
-      }
-      &.crab {
-        background-image: $crab;
-      }
-      &.chicken {
-        background-image: $chicken;
-      }
-      &.shrimp {
-        background-image: $shrimp;
-      }
     }
   }
 
@@ -353,41 +347,82 @@ export default {
     align-items: center;
     justify-content: space-around;
     width: 100%;
-    p {
+
+    .dices-faces {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      font-size: 0.8rem;
-      margin: 0;
-      padding: 1rem 0.5rem;
-      border-top: 2px solid #fff;
-
-      &.active {
-        background-color: rgba(240, 109, 1, 0.4);
-      }
-
-      &.header {
-        border-top: none;
-      }
-
-      &:last-of-type {
-        border-bottom: 2px solid #fff;
-      }
-
-      .gains {
-        color: rgb(21, 201, 75);
-      }
-      .pertes {
-        color: var(--orange);
-      }
-
-      span {
-        flex: 1;
+      justify-content: center;
+      margin: 0.5rem auto;
+      .face {
+        width: 70px;
+        height: 70px;
+        aspect-ratio: 1;
+        background-color: #fff;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 70%;
+        border: 2px solid rgb(240, 109, 1);
+        border-radius: 10%;
+        margin-right: 0.5rem;
+        &:last-of-type {
+          margin-right: none;
+        }
       }
     }
     .btn {
       margin: 1rem auto;
+    }
+
+    .results-table {
+      width: 100%;
+
+      tr.result-line {
+        border-bottom: 1px solid #fff;
+        &.active {
+          background-color: rgba(36, 109, 243, 0.4);
+        }
+
+        td {
+          text-align: center;
+
+          &.gains {
+            color: rgb(21, 201, 75);
+          }
+          &.pertes {
+            color: var(--orange);
+          }
+
+          &.detail-mises {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin: 0;
+            padding: 1rem 0.5rem;
+
+            & > span {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              .mise-face {
+                width: 40px;
+                height: 40px;
+                aspect-ratio: 1;
+                background-color: #fff;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 60%;
+                border: 1px solid rgb(240, 109, 1);
+                border-radius: 10%;
+                margin-bottom: 0.2rem;
+              }
+              .mise-money {
+                font-size: 0.6rem;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
