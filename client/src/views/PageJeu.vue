@@ -189,6 +189,7 @@ main {
     }
 
     @include media-max(700px) {
+      overflow: hidden;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: 2fr 1fr 1fr;
       grid-template-areas:

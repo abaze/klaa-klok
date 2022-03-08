@@ -72,7 +72,7 @@
         </p>
       </div>
     </template>
-    <bg-waves :color="'#289548'" :animate="true" />
+    <bg-waves :color="'#289548'" :animate="true" :waveClass="'waves-dices'" />
   </div>
 </template>
 
@@ -204,7 +204,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dice-area {
   grid-area: area-dice;
   position: relative;
@@ -215,9 +215,6 @@ export default {
   align-items: center;
   justify-content: center;
   background: #289548;
-
-  box-shadow: inset 10px 10px 30px 10px rgba(0, 0, 0, 0.2),
-    inset -10px -10px 30px 10px rgba(0, 0, 0, 0.2);
 
   .msg-info {
     width: 300px;

@@ -31,7 +31,7 @@
         </template>
       </div>
     </div>
-    <bg-waves :color="'#23b107'" :animate="true" />
+    <bg-waves :color="'#23b107'" :animate="true" :waveClass="'waves-board'" />
   </div>
 </template>
 

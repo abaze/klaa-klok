@@ -28,7 +28,7 @@
         <span class="sr-only">Loading...</span>
       </div>
     </template>
-    <bg-waves :color="'#1a3131'" :animate="true" />
+    <bg-waves :color="'#1a3131'" :animate="true" :waveClass="'waves-chrono'" />
   </div>
 </template>
 

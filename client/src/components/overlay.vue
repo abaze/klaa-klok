@@ -52,7 +52,7 @@
               <thead>
                 <tr>
                   <th>Joueurs</th>
-                  <th>Mises</th>
+                  <th class="th-mises">Mises</th>
                   <th>Gains</th>
                   <th>Pertes</th>
                   <th>Soldes</th>
@@ -376,14 +376,34 @@ export default {
     .results-table {
       width: 100%;
 
+      th {
+        @include media-max(700px) {
+          font-size: 0.7rem;
+        }
+
+        &.th-mises {
+          @include media-max(700px) {
+            max-width: 110px;
+            flex-wrap: wrap;
+          }
+        }
+      }
+
       tr.result-line {
+        margin: 0;
         border-bottom: 1px solid #fff;
+        background-color: rgba(36, 109, 243, 0.4);
         &.active {
-          background-color: rgba(36, 109, 243, 0.4);
+          color: yellow;
         }
 
         td {
           text-align: center;
+          @include media-max(700px) {
+            font-size: 0.7rem;
+            padding: 0;
+            margin: 0;
+          }
 
           &.gains {
             color: rgb(21, 201, 75);
@@ -398,7 +418,12 @@ export default {
             justify-content: center;
             font-size: 0.8rem;
             margin: 0;
-            padding: 1rem 0.5rem;
+            padding: 1rem 0.1rem;
+            @include media-max(700px) {
+              max-width: 180px;
+              margin: auto;
+              flex-wrap: wrap;
+            }
 
             & > span {
               display: flex;
@@ -415,6 +440,11 @@ export default {
                 border: 1px solid rgb(240, 109, 1);
                 border-radius: 10%;
                 margin-bottom: 0.2rem;
+                @include media-max(700px) {
+                  width: 30px;
+                  height: 30px;
+                  background-size: 80%;
+                }
               }
               .mise-money {
                 font-size: 0.6rem;

@@ -10,7 +10,7 @@
     </h1>
     <p>Total Gains : {{ totalGains }} €</p>
     <p>Mise en cours : {{ currentMise }} €</p>
-    <bg-waves :color="'#615c70'" :animate="true" />
+    <bg-waves :color="'#615c70'" :animate="true" :waveClass="'waves-stats'" />
   </div>
 </template>
 

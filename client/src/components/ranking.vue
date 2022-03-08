@@ -10,7 +10,7 @@
       <span class="username">{{ player.name }}</span>
       <span class="score">{{ player.totalGains }} €</span>
     </div>
-    <bg-waves :color="'#351b7e'" :animate="true" />
+    <bg-waves :color="'#351b7e'" :animate="true" :waveClass="'waves-ranking'" />
   </div>
 </template>
 

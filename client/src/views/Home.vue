@@ -131,7 +131,7 @@
         </form>
       </template>
     </div>
-    <bg-waves :color="'#1b6fc7'" :animate="true" />
+    <bg-waves :color="'#1b6fc7'" :animate="true" :waveClass="'waves-home'" />
   </div>
 </template>
 
@@ -260,12 +260,6 @@ export default {
   border-radius: 32% 68% 25% 75% / 45% 48% 52% 55%;
   padding: 3rem 0.5rem;
   text-align: center;
-  @include media-max(600px) {
-    border-radius: 0;
-    width: 100%;
-    border-left: none;
-    border-right: none;
-  }
 }
 
 .code {
