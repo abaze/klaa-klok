@@ -10,14 +10,17 @@
     </h1>
     <p>Total Gains : {{ totalGains }} €</p>
     <p>Mise en cours : {{ currentMise }} €</p>
+    <bg-waves :color="'#615c70'" :animate="true" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import bgWaves from "./bg-waves.vue";
+
 export default {
   name: "player-zone",
-
+  components: { bgWaves },
   computed: {
     ...mapState({
       colorClass: (state) => state.players.player.class,
@@ -32,7 +35,7 @@ export default {
 <style lang="scss">
 .player-zone {
   grid-area: player-zone;
-  background-color: var(--grey);
+  background: #615c70;
 
   h1 {
     display: flex;

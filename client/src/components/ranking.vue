@@ -10,13 +10,17 @@
       <span class="username">{{ player.name }}</span>
       <span class="score">{{ player.totalGains }} €</span>
     </div>
+    <bg-waves :color="'#351b7e'" :animate="true" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+
+import bgWaves from "./bg-waves.vue";
 export default {
   name: "ranking",
+  components: { bgWaves },
   computed: {
     ...mapState({
       playersList: (state) => state.games.game.playersList,
@@ -35,7 +39,9 @@ export default {
 <style lang="scss">
 .ranking {
   grid-area: ranking;
-  background-color: var(--purple);
+  /*background-color: var(--purple);*/
+  background: #351b7e;
+
   counter-reset: ranking;
   .card {
     position: relative;

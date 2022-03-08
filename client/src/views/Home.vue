@@ -1,131 +1,137 @@
 <template>
-  <div class="content">
-    <h1>KlaaKlok Game</h1>
+  <div class="page-home">
+    <div class="content">
+      <h1>KlaaKlok Game</h1>
 
-    <!-- ECRAN PAR DEFAUT -->
-    <template v-if="choixPlayer === 'home'">
-      Vous souhaitez
-      <button class="btn" @click="choixPlayer = 'new-salon'">
-        Créer un nouveau Salon
-      </button>
-      Ou
-      <button class="btn" @click="choixPlayer = 'join-salon'">
-        Rejoindre un Salon
-      </button>
-    </template>
-    <!-- ECRAN SUIVANTS -->
-    <template v-else-if="choixPlayer !== 'home' && choixPlayer">
-      <form @submit.prevent="sendGameForm" autocomplete="off">
-        <!-- ECRAN NEW SALON -->
-        <template v-if="choixPlayer === 'new-salon'">
-          <p>
-            Code salon à communiquer à vos amis:<br /><span class="code">{{
-              codeSalon
-            }}</span>
-          </p>
-          <p>Nombre de joueurs ?</p>
-          <div class="radio-choice">
-            <label class="btn-radio" for="limite_player_2">
-              <input
-                v-model="nbPlayers"
-                id="limite_player_2"
-                type="radio"
-                name="limitPlayer"
-                value="2"
-                checked
-              />
-              <span>2</span>
-            </label>
-            <label class="btn-radio" for="limite_player_4">
-              <input
-                v-model="nbPlayers"
-                id="limite_player_4"
-                type="radio"
-                name="limitPlayer"
-                value="4"
-              />
-              <span>4</span>
-            </label>
-            <label class="btn-radio" for="limite_player_6">
-              <input
-                v-model="nbPlayers"
-                id="limite_player_6"
-                type="radio"
-                name="limitPlayer"
-                value="6"
-              />
-              <span>6</span>
-            </label>
-          </div>
-        </template>
+      <!-- ECRAN PAR DEFAUT -->
+      <template v-if="choixPlayer === 'home'">
+        Vous souhaitez
+        <button class="btn" @click="choixPlayer = 'new-salon'">
+          Créer un nouveau Salon
+        </button>
+        Ou
+        <button class="btn" @click="choixPlayer = 'join-salon'">
+          Rejoindre un Salon
+        </button>
+      </template>
+      <!-- ECRAN SUIVANTS -->
+      <template v-else-if="choixPlayer !== 'home' && choixPlayer">
+        <form @submit.prevent="sendGameForm" autocomplete="off">
+          <!-- ECRAN NEW SALON -->
+          <template v-if="choixPlayer === 'new-salon'">
+            <p>
+              Code salon à communiquer à vos amis:<br /><span class="code">{{
+                codeSalon
+              }}</span>
+            </p>
+            <p>Nombre de joueurs ?</p>
+            <div class="radio-choice">
+              <label class="btn-radio" for="limite_player_2">
+                <input
+                  v-model="nbPlayers"
+                  id="limite_player_2"
+                  type="radio"
+                  name="limitPlayer"
+                  value="2"
+                  checked
+                />
+                <span>2</span>
+              </label>
+              <label class="btn-radio" for="limite_player_4">
+                <input
+                  v-model="nbPlayers"
+                  id="limite_player_4"
+                  type="radio"
+                  name="limitPlayer"
+                  value="4"
+                />
+                <span>4</span>
+              </label>
+              <label class="btn-radio" for="limite_player_6">
+                <input
+                  v-model="nbPlayers"
+                  id="limite_player_6"
+                  type="radio"
+                  name="limitPlayer"
+                  value="6"
+                />
+                <span>6</span>
+              </label>
+            </div>
+          </template>
 
-        <!-- ECRAN REJOINDRE SALON EXISTANT -->
-        <template v-if="choixPlayer === 'join-salon'">
-          <p>Entrez le code salon à rejoindre :</p>
-          <div class="align-h btn-group">
+          <!-- ECRAN REJOINDRE SALON EXISTANT -->
+          <template v-if="choixPlayer === 'join-salon'">
+            <p>Entrez le code salon à rejoindre :</p>
+            <div class="align-h btn-group">
+              <input
+                v-model="codeSalon"
+                type="text"
+                id="userName"
+                maxlength="5"
+                :class="[
+                  { good: isCodeSalonValid },
+                  { bad: !isCodeSalonValid && isCodeSalonValid !== null },
+                ]"
+                :readonly="isCodeSalonValid"
+                ref="code_salon"
+              />
+              <button
+                class="btn xs"
+                @click.prevent="verifCodeSalon"
+                :class="[
+                  { good: isCodeSalonValid },
+                  { bad: !isCodeSalonValid && isCodeSalonValid !== null },
+                ]"
+                :disabled="!codeSalon || isCodeSalonValid"
+              >
+                <i
+                  v-if="loaderCodeSalon"
+                  class="fa fa-refresh fa-spin fa-fw"
+                ></i>
+                <span v-else>OK</span>
+              </button>
+            </div>
+          </template>
+
+          <!-- PARTIE USERNAME -->
+          <template
+            v-if="
+              choixPlayer === 'new-salon' ||
+              (choixPlayer == 'join-salon' && isCodeSalonValid)
+            "
+          >
+            <p>Entrez votre nom</p>
             <input
-              v-model="codeSalon"
+              v-model="username"
               type="text"
               id="userName"
-              maxlength="5"
-              :class="[
-                { good: isCodeSalonValid },
-                { bad: !isCodeSalonValid && isCodeSalonValid !== null },
-              ]"
-              :readonly="isCodeSalonValid"
-              ref="code_salon"
+              maxlength="20"
+              :readonly="loaderSave"
+              ref="input_username"
+              autocomplete="off"
             />
+
             <button
-              class="btn xs"
-              @click.prevent="verifCodeSalon"
-              :class="[
-                { good: isCodeSalonValid },
-                { bad: !isCodeSalonValid && isCodeSalonValid !== null },
-              ]"
-              :disabled="!codeSalon || isCodeSalonValid"
+              type="button"
+              class="btn"
+              :disabled="!username || !codeSalon"
+              @click.prevent="sendGameForm"
             >
-              <i v-if="loaderCodeSalon" class="fa fa-refresh fa-spin fa-fw"></i>
-              <span v-else>OK</span>
+              <i v-if="loaderSave" class="fa fa-refresh fa-spin fa-fw"></i>
+              Valider
             </button>
-          </div>
-        </template>
-
-        <!-- PARTIE USERNAME -->
-        <template
-          v-if="
-            choixPlayer === 'new-salon' ||
-            (choixPlayer == 'join-salon' && isCodeSalonValid)
-          "
-        >
-          <p>Entrez votre nom</p>
-          <input
-            v-model="username"
-            type="text"
-            id="userName"
-            maxlength="20"
-            :readonly="loaderSave"
-            ref="input_username"
-            autocomplete="off"
-          />
-
-          <button
-            type="button"
-            class="btn"
-            :disabled="!username || !codeSalon"
-            @click.prevent="sendGameForm"
-          >
-            <i v-if="loaderSave" class="fa fa-refresh fa-spin fa-fw"></i>
-            Valider
-          </button>
-        </template>
-        <div class="break"></div>
-        <br />
-        <a @click.prevent="choixPlayer = 'home'" class="btn-link">
-          <i class="fa fa-chevron-left" aria-hidden="true"></i>
-          Retour
-        </a>
-      </form>
-    </template>
+          </template>
+          <div class="break"></div>
+          <br />
+          <a @click.prevent="choixPlayer = 'home'" class="btn-link">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            Retour
+          </a>
+        </form>
+      </template>
+    </div>
+    <bg-waves :color="'#1b6fc7'" :animate="true" />
   </div>
 </template>
 
@@ -135,8 +141,11 @@ import { useRouter } from "vue-router";
 import { mapActions, mapState } from "vuex";
 import SocketIO from "../services/socketio.service.js";
 
+import bgWaves from "../components/bg-waves.vue";
+
 export default {
   name: "Home",
+  components: { bgWaves },
   data() {
     return {
       username: null,
@@ -231,14 +240,14 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background: rgb(0, 241, 255);
-  background: radial-gradient(
-    circle,
-    rgba(0, 241, 255, 1) 0%,
-    rgba(84, 138, 242, 1) 82%,
-    rgba(27, 111, 199, 1) 100%
-  );
+.page-home {
+  position: relative;
+  z-index: 1;
+  background: #1b6fc7;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 .active-players {
   background: rgba(255, 255, 255, 0.5);

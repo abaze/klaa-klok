@@ -31,14 +31,18 @@
         </template>
       </div>
     </div>
+    <bg-waves :color="'#23b107'" :animate="true" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import SocketIO from "../services/socketio.service";
+
+import bgWaves from "./bg-waves.vue";
 export default {
   name: "board",
+  components: { bgWaves },
   emits: ["selectFace"],
   computed: {
     ...mapState({
@@ -116,17 +120,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .board {
   grid-area: board;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #589745;
   padding: 0.25rem;
   width: 100%;
   height: 100%;
+  background: var(--green);
+  z-index: 1;
   .content-faces {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -154,7 +159,7 @@ export default {
       border-radius: 50%;
       cursor: pointer;
       overflow: hidden;
-      animation: scaleShaddow 2s infinite alternate linear;
+      animation: rotateFace 10s infinite linear;
 
       @keyframes scaleShaddow {
         from {
@@ -283,9 +288,9 @@ export default {
 
       &.disable {
         pointer-events: none;
-        cursor: default;
+        cursor: not-allowed;
         animation: none;
-        opacity: 0.5;
+        filter: grayscale(1);
       }
     }
   }
