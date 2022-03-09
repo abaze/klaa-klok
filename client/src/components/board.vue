@@ -1,37 +1,38 @@
 <template>
-  <div class="board">
-    <div class="content-faces">
-      <div
-        v-for="face in faces"
-        @click="!facesDejaMise.includes(face.id) && selectFace($event)"
-        :key="face.id"
-        :class="[
-          'face ' + face.id,
-          { disable: chronoIsFinish || !game.gameIsReady },
-        ]"
-        :data-face="face.id"
-        :title="face.label"
-      >
-        <template v-for="(mise, index) in misesByPlayer">
-          <div
-            class="card"
-            :class="mise.player.class"
-            v-if="mise.face === face.id"
-            :key="index"
-          >
-            <span
-              class="close-mise"
-              v-if="!chronoIsFinish && mise.player.id === myPlayerId"
-              @click="deleteMise($event, mise)"
+  <div class="content-board">
+    <div class="board">
+      <div class="content-faces">
+        <div
+          v-for="face in faces"
+          @click="!facesDejaMise.includes(face.id) && selectFace($event)"
+          :key="face.id"
+          :class="[
+            'face ' + face.id,
+            { disable: chronoIsFinish || !game.gameIsReady },
+          ]"
+          :data-face="face.id"
+          :title="face.label"
+        >
+          <template v-for="(mise, index) in misesByPlayer">
+            <div
+              class="card"
+              :class="mise.player.class"
+              v-if="mise.face === face.id"
+              :key="index"
             >
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </span>
-            <span>{{ mise.mise }} €</span>
-          </div>
-        </template>
+              <span
+                class="close-mise"
+                v-if="!chronoIsFinish && mise.player.id === myPlayerId"
+                @click="deleteMise($event, mise)"
+              >
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </span>
+              <span>{{ mise.mise }} €</span>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
-    <bg-waves :color="'#23b107'" :animate="true" :waveClass="'waves-board'" />
   </div>
 </template>
 
@@ -39,10 +40,8 @@
 import { mapState, mapActions } from "vuex";
 import SocketIO from "../services/socketio.service";
 
-import bgWaves from "./bg-waves.vue";
 export default {
   name: "board",
-  components: { bgWaves },
   emits: ["selectFace"],
   computed: {
     ...mapState({
@@ -121,176 +120,206 @@ export default {
 </script>
 
 <style lang="scss">
-.board {
-  grid-area: board;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem;
-  width: 100%;
-  height: 100%;
-  background: var(--green);
-  z-index: 1;
-  .content-faces {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-areas:
-      "tiger crab pumpkin"
-      "fish shrimp chicken";
-    width: 100%;
+.content-board {
+  perspective: 200px;
+  position: fixed;
+  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .board {
+    grid-area: board;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    width: 175%;
+    height: 130%;
+    z-index: 1;
+    background-image: url("../assets/board/bg.jpg");
+    background-size: 20% 100%;
+    background-repeat: repeat;
+    transform: rotateX(5deg) rotateY(0deg) translate(-21%, -25%);
+    transform-style: preserve-3d;
+    .content-faces {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-areas:
+        "tiger crab pumpkin"
+        "fish shrimp chicken";
+      width: 100%;
+      max-width: 55vw;
+      min-width: 445px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 6px 3px 0 rgba(0, 0, 0, 0.8);
+      border: 10px solid var(--orange);
+      padding: 1rem;
 
-    .face {
-      position: relative;
-      display: flex;
-      align-self: center;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      @include aspect-ratio(1, 1);
-      height: 100%;
-      background-color: #fff;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: 60%;
-      border: 5px solid #444444;
-      border-radius: 50%;
-      cursor: pointer;
-      overflow: hidden;
-      animation: rotateFace 10s infinite linear;
-
-      @keyframes scaleShaddow {
-        from {
-          box-shadow: 0 0 1px 1px #fff;
-        }
-        from {
-          box-shadow: 0 0 10px 5px #fff;
-        }
-      }
-      @keyframes rotateFace {
-        from {
-          transform: rotate(0deg);
-        }
-        from {
-          transform: rotate(360deg);
-        }
+      @include media-max(500px) {
+        min-width: 260px;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-template-areas:
+          "tiger crab"
+          "pumpkin fish"
+          "shrimp chicken";
       }
 
-      &.tiger {
-        grid-area: tiger;
-        background-image: $tiger;
-      }
-      &.pumpkin {
-        grid-area: pumpkin;
-        background-image: $pumpkin;
-      }
-      &.fish {
-        grid-area: fish;
-        background-image: $fish;
-      }
-      &.crab {
-        grid-area: crab;
-        background-image: $crab;
-      }
-      &.chicken {
-        grid-area: chicken;
-        background-image: $chicken;
-      }
-      &.shrimp {
-        grid-area: shrimp;
-        background-image: $shrimp;
-      }
-
-      .card {
-        position: absolute;
+      .face {
+        position: relative;
         display: flex;
-        align-items: center;
+        align-self: center;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
-        color: #fff;
-        border-radius: 50%;
-        opacity: 0.9;
-        font-size: 0.8rem;
-        font-weight: bold;
-        width: 60px;
-        white-space: nowrap;
-        overflow: hidden;
+        flex-wrap: wrap;
         @include aspect-ratio(1, 1);
+        height: 100%;
+        background-color: #fff;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 60%;
+        border: 5px solid #444444;
+        border-radius: 50%;
+        cursor: pointer;
+        overflow: hidden;
+        animation: rotateFace 10s infinite linear;
 
-        @include media-max(700px) {
-          width: 40px;
-          font-size: 0.6rem;
-        }
-
-        &:first-child {
-          top: 0;
-          left: 50%;
-          transform: translateY(-30%) translateX(-50%);
-          span {
-            &.close-mise {
-              top: unset;
-              bottom: 0;
-            }
+        @keyframes scaleShaddow {
+          from {
+            box-shadow: 0 0 1px 1px #fff;
+          }
+          from {
+            box-shadow: 0 0 10px 5px #fff;
           }
         }
-        &:nth-child(2) {
-          top: 25%;
-          right: 0;
-          transform: translate(0, -50%) rotate(57deg);
-          span {
-            &.close-mise {
-              top: unset;
-              bottom: 0;
-            }
+        @keyframes rotateFace {
+          from {
+            transform: rotate(0deg);
           }
-        }
-        &:nth-child(3) {
-          bottom: 25%;
-          right: 0;
-          transform: translate(5%, 25%) rotate(305deg);
-        }
-        &:nth-child(4) {
-          left: 50%;
-          bottom: 0%;
-          transform: translate(-50%, 25%);
-        }
-        &:nth-child(5) {
-          bottom: 0;
-          left: 15%;
-          transform: translate(-50%, -50%) rotate(50deg);
-        }
-        &:nth-child(6) {
-          top: 25%;
-          left: 15%;
-          transform: translate(-50%, -50%) rotate(-55deg);
-          span {
-            &.close-mise {
-              top: unset;
-              bottom: 0;
-            }
+          from {
+            transform: rotate(360deg);
           }
         }
 
-        span {
+        &.tiger {
+          grid-area: tiger;
+          background-image: $tiger;
+        }
+        &.pumpkin {
+          grid-area: pumpkin;
+          background-image: $pumpkin;
+        }
+        &.fish {
+          grid-area: fish;
+          background-image: $fish;
+        }
+        &.crab {
+          grid-area: crab;
+          background-image: $crab;
+        }
+        &.chicken {
+          grid-area: chicken;
+          background-image: $chicken;
+        }
+        &.shrimp {
+          grid-area: shrimp;
+          background-image: $shrimp;
+        }
+
+        .card {
           position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+          color: #fff;
+          border-radius: 50%;
+          opacity: 0.9;
+          font-size: 0.8rem;
+          font-weight: bold;
+          width: 60px;
+          white-space: nowrap;
+          overflow: hidden;
+          @include aspect-ratio(1, 1);
 
-          &.close-mise {
-            top: 5px;
-            transform: translateX(-50);
+          @include media-max(700px) {
+            width: 40px;
+            font-size: 0.6rem;
+          }
+
+          &:first-child {
+            top: 0;
+            left: 50%;
+            transform: translateY(-30%) translateX(-50%);
+            span {
+              &.close-mise {
+                top: unset;
+                bottom: 0;
+              }
+            }
+          }
+          &:nth-child(2) {
+            top: 25%;
+            right: 0;
+            transform: translate(0, -50%) rotate(57deg);
+            span {
+              &.close-mise {
+                top: unset;
+                bottom: 0;
+              }
+            }
+          }
+          &:nth-child(3) {
+            bottom: 25%;
+            right: 0;
+            transform: translate(5%, 25%) rotate(305deg);
+          }
+          &:nth-child(4) {
+            left: 50%;
+            bottom: 0%;
+            transform: translate(-50%, 25%);
+          }
+          &:nth-child(5) {
+            bottom: 0;
+            left: 15%;
+            transform: translate(-50%, -50%) rotate(50deg);
+          }
+          &:nth-child(6) {
+            top: 25%;
+            left: 15%;
+            transform: translate(-50%, -50%) rotate(-55deg);
+            span {
+              &.close-mise {
+                top: unset;
+                bottom: 0;
+              }
+            }
+          }
+
+          span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            &.close-mise {
+              top: 5px;
+              transform: translateX(-50);
+            }
           }
         }
-      }
 
-      &.disable {
-        pointer-events: none;
-        cursor: not-allowed;
-        animation: none;
-        filter: grayscale(1);
+        &.disable {
+          pointer-events: none;
+          cursor: not-allowed;
+          animation: none;
+          filter: grayscale(1);
+        }
       }
     }
   }

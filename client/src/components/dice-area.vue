@@ -72,7 +72,6 @@
         </p>
       </div>
     </template>
-    <bg-waves :color="'#289548'" :animate="true" :waveClass="'waves-dices'" />
   </div>
 </template>
 
@@ -81,11 +80,9 @@ import { mapState, mapActions } from "vuex";
 import SocketIO from "../services/socketio.service";
 
 import dice from "@/components/dice.vue";
-import bgWaves from "./bg-waves.vue";
-
 export default {
   name: "dice-area",
-  components: { dice, bgWaves },
+  components: { dice },
   data() {
     return {
       throwDice: false,
@@ -214,7 +211,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #289548;
 
   .msg-info {
     width: 300px;

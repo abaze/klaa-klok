@@ -1,11 +1,11 @@
 <template>
   <main role="main">
     <div class="layout">
-      <chrono></chrono>
-      <ranking></ranking>
-      <player-stats></player-stats>
       <board></board>
       <dice-area></dice-area>
+      <ranking></ranking>
+      <chrono></chrono>
+
       <overlay></overlay>
     </div>
     <notification />
@@ -15,7 +15,6 @@
 <script>
 // components
 import ranking from "../components/ranking.vue";
-import playerStats from "../components/stats-player.vue";
 import board from "../components/board.vue";
 import diceArea from "../components/dice-area.vue";
 import overlay from "../components/overlay.vue";
@@ -32,7 +31,6 @@ export default {
   components: {
     chrono,
     ranking,
-    playerStats,
     board,
     diceArea,
     overlay,
@@ -160,6 +158,9 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  background-color: var(--green);
+}
 main {
   position: relative;
   width: 100vw;
@@ -173,29 +174,25 @@ main {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 1fr 150px;
     grid-gap: 0;
     grid-template-areas:
-      "ranking board player-zone"
-      "chrono board area-dice";
+      "board ranking"
+      "area-dice chrono";
     justify-content: center;
     @include media-max(1000px) {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: 3fr 1fr;
-      grid-template-areas:
-        "board board board board"
-        "ranking chrono area-dice player-zone";
+      grid-template-columns: 1fr 300px;
+      grid-template-rows: 1fr 150px;
     }
 
-    @include media-max(700px) {
+    @include media-max(900px) {
       overflow: hidden;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: 2fr 1fr 1fr;
+      grid-template-columns: 1fr 125px;
+      grid-template-rows: 3fr 1fr;
       grid-template-areas:
-        "board board board board"
-        "ranking ranking player-zone player-zone"
-        "chrono chrono area-dice area-dice";
+        "board board"
+        "area-dice chrono";
     }
   }
 }
