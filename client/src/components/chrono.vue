@@ -22,10 +22,14 @@
       </template>
     </template>
     <template v-else>
-      <h1>Partie en attente</h1>
-      <div>
-        <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
-        <span class="sr-only">Loading...</span>
+      <div class="zone-time">
+        <img
+          src="../assets/board/chrono.png"
+          width="60"
+          alt="Temps restant : "
+        />
+
+        <div class="time">00:{{ chrono.initialChronoLimit }}</div>
       </div>
     </template>
   </div>
@@ -84,6 +88,8 @@ export default {
 <style lang="scss">
 .chrono {
   grid-area: chrono;
+
+  font-family: $fontBangers;
   .zone-time {
     position: relative;
     display: flex;
@@ -93,17 +99,7 @@ export default {
     color: #fff;
 
     .time {
-      margin-left: 0.2rem;
-      animation: blink 1s linear infinite alternate;
-
-      @keyframes blink {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
+      margin-left: 0.5rem;
     }
   }
 }

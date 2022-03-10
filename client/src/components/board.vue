@@ -141,7 +141,7 @@ export default {
     background-image: url("../assets/board/bg.jpg");
     background-size: 20% 100%;
     background-repeat: repeat;
-    transform: rotateX(5deg) rotateY(0deg) translate(-21%, -25%);
+    transform: rotateX(10deg) rotateY(0deg) translate3d(-21.5%, -25%, 20px);
     transform-style: preserve-3d;
     .content-faces {
       display: grid;
@@ -150,8 +150,8 @@ export default {
       grid-template-areas:
         "tiger crab pumpkin"
         "fish shrimp chicken";
-      width: 100%;
-      max-width: 55vw;
+      width: 100vw;
+      max-width: 866px;
       min-width: 445px;
       background: #fff;
       border-radius: 15px;
@@ -160,7 +160,8 @@ export default {
       padding: 1rem;
 
       @include media-max(500px) {
-        min-width: 260px;
+        min-width: 300px;
+        max-width: 95vw;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(3, 1fr);
         grid-template-areas:
