@@ -83,7 +83,7 @@
             </table>
 
             <input
-              class="btn"
+              class="btn glow"
               type="button"
               value="Partie suivante"
               @click="newPartie"
@@ -280,6 +280,7 @@ export default {
   align-items: center;
   justify-content: center;
   animation: fadeIn 200ms linear;
+  font-family: $fontBangers;
 
   @keyframes fadeIn {
     from {

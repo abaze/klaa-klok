@@ -1,11 +1,12 @@
 <template>
   <main role="main">
     <div class="layout">
-      <board></board>
-      <dice-area></dice-area>
       <ranking></ranking>
-      <chrono></chrono>
-
+      <board></board>
+      <div class="footer-area">
+        <dice-area></dice-area>
+        <chrono></chrono>
+      </div>
       <overlay></overlay>
     </div>
     <notification />
@@ -173,27 +174,27 @@ main {
     position: relative;
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 230px;
-    grid-template-rows: 1fr 150px;
-    grid-gap: 0;
-    grid-template-areas:
-      "board ranking"
-      "area-dice chrono";
-    justify-content: center;
-    @include media-max(1000px) {
-      grid-template-columns: 1fr 230px;
-      grid-template-rows: 1fr 150px;
+    display: flex;
+    align-items: flex-end;
+    .ranking {
+      position: fixed;
+      right: -5px;
+      top: 10px;
+      z-index: 3;
     }
 
-    @include media-max(900px) {
-      overflow: hidden;
-      grid-template-columns: 1fr;
-      grid-template-rows: 6fr 1fr 1fr;
-      grid-template-areas:
-        "board"
-        "chrono"
-        "area-dice";
+    .footer-area {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      padding: 1rem;
+
+      @include media-max(900px) {
+        flex-direction: column-reverse;
+        .chrono {
+          margin-bottom: 1rem;
+        }
+      }
     }
   }
 }

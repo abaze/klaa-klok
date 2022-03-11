@@ -6,7 +6,7 @@ export default {
     return {
       chronoIsFinish: false,
       initialChronoLimit: 30,
-      chrono: null,
+      chrono: "00:00",
       countSeconds: null,
     };
   },
@@ -45,7 +45,7 @@ export default {
         else {
           clearInterval(intervalEverySecond);
           commit("SET_COUNT_SECONDS", null);
-          commit("SET_CHRONO", null);
+          commit("SET_CHRONO", 0);
           commit("SET_CHRONO_IS_FINISH", true);
 
           // on ferme la popup des miseurs au cas ou

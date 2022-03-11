@@ -128,6 +128,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 1;
   .board {
     grid-area: board;
     position: relative;
@@ -135,14 +136,14 @@ export default {
     align-items: center;
     justify-content: center;
     padding: 0.25rem;
-    width: 175%;
-    height: 130%;
+    width: 200vw;
+    height: 150vh;
     z-index: 1;
     background-image: url("../assets/board/bg.jpg");
     background-size: 20% 100%;
     background-repeat: repeat;
-    transform: rotateX(10deg) rotateY(0deg) translate3d(-21.5%, -25%, 20px);
-    transform-style: preserve-3d;
+    transform: rotateX(10deg) rotateY(0deg) translate3d(-50vw, -50vh, 50px);
+    transform-style: flat;
     .content-faces {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -150,8 +151,7 @@ export default {
       grid-template-areas:
         "tiger crab pumpkin"
         "fish shrimp chicken";
-      width: 100vw;
-      max-width: 866px;
+      width: min(100vw - (1rem + 50px), 60vw);
       min-width: 445px;
       background: #fff;
       border-radius: 15px;
@@ -161,7 +161,7 @@ export default {
 
       @include media-max(500px) {
         min-width: 300px;
-        max-width: 95vw;
+        width: min(100vw - 1rem, 90vw);
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(3, 1fr);
         grid-template-areas:

@@ -7,7 +7,7 @@
         <!-- SI LE CHRONO EST FINISH ON VA LANCER LES DES-->
         <template v-if="chronoIsFinish">
           <!-- ON PREVIENT QUE LE MAINPLAYER VA LANCER LES DES-->
-          <p v-if="game.mainPlayer.id !== player.id">
+          <p class="msg-info" v-if="game.mainPlayer.id !== player.id">
             {{ game.mainPlayer.name }} va lancer les dés...
             <i class="fa fa-refresh fa-spin fa-fw"></i>
             <span class="sr-only">Loading...</span>
@@ -27,7 +27,7 @@
         <!--  SI LE CHRONO NEST PAS FINISH, ON MISE -->
         <template v-else>
           <div>
-            <p>
+            <p class="msg-info">
               <!-- SI ON EST GAME OVER ON REGARDE LES AUTRES JOUER -->
               {{
                 player.gameOver
@@ -44,11 +44,11 @@
       <template v-else>
         <div>
           <!-- SI JOUEUR PAS PRET ON AFFICHE LE BOUTON -->
-          <button v-if="!player.isReady" class="btn" @click="playerReady">
+          <button v-if="!player.isReady" class="btn glow" @click="playerReady">
             Je suis prêt !
           </button>
           <!-- SINON ON ATTEND LES AUTRES JOEURS -->
-          <p v-else>
+          <p v-else class="msg-info">
             Joueurs prêts {{ countPlayersReady }}/{{
               game.playersList.length
             }}...
@@ -61,12 +61,11 @@
     <!-- SI IL MANQUE UN JOUEUR-->
     <template v-else>
       <div>
-        <p>
-          En attente de joueur...<br /><br />
-          {{ game.playersList.length }}/{{ game.limitPlayers }} joueur{{
-            plurial
-          }}
-          sont connecté{{ plurial }}
+        <p class="msg-info">
+          {{ game.playersList.length }}/{{
+            game.limitPlayers
+          }}&nbsp;&nbsp;joueur{{ plurial }}
+          {{ plurial ? "sont" : "est" }} connecté{{ plurial }}
           <i class="fa fa-refresh fa-spin fa-fw"></i>
           <span class="sr-only">Loading...</span>
         </p>
@@ -99,7 +98,7 @@ export default {
       player: (state) => state.players.player,
     }),
     plurial() {
-      return this.game.playersList.length > 0 ? "s" : "";
+      return this.game.playersList.length > 1 ? "s" : "";
     },
     // nous retourne cb de joueur ont le statut Ready à true
     countPlayersReady() {
@@ -203,7 +202,7 @@ export default {
 
 <style lang="scss">
 .dice-area {
-  grid-area: area-dice;
+  font-family: $fontAtma;
   position: relative;
   width: 100%;
   height: 100%;
@@ -213,8 +212,14 @@ export default {
   justify-content: center;
 
   .msg-info {
-    width: 300px;
-    font-size: 1rem;
+    font-size: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 5px 2px rgba(0, 0, 0, 0.7);
+    padding: 0.25rem 1rem !important;
+    backdrop-filter: blur(2px);
+    @include media-max(600px) {
+      font-size: 1.4rem;
+    }
   }
 
   .group-dices {

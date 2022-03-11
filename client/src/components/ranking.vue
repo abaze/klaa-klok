@@ -49,13 +49,12 @@ export default {
 <style lang="scss">
 $size_btn_open: 75px;
 .ranking {
-  grid-area: ranking;
+  align-self: flex-start;
   counter-reset: ranking;
   font-family: $fontBangers !important;
 
   @include media-max(900px) {
-    position: fixed !important;
-    top: calc($size_btn_open + 10px);
+    top: calc($size_btn_open + 10px) !important;
     right: -10px;
     width: 230px !important;
     transform: translateX(100%);
@@ -81,16 +80,17 @@ $size_btn_open: 75px;
     /*background-image: url(../assets/board/bg.jpg);
     background-size: contain;
     background-repeat: repeat;*/
-    background: rgba(240, 109, 0, 0.9);
+    background: rgba(0, 0, 0, 0.4);
     overflow: hidden;
+    backdrop-filter: blur(2px);
 
     &:before {
       position: absolute;
-      right: 3rem;
+      right: 2rem;
       font-style: italic;
       font-weight: 800;
       opacity: 0.4;
-      font-size: 5rem;
+      font-size: 4rem;
       counter-increment: ranking;
       content: "#" counter(ranking) " ";
     }
@@ -131,6 +131,8 @@ $size_btn_open: 75px;
 .btn-open-rank {
   display: none;
   position: absolute;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
   top: 10px;
   right: 10px;
   background: var(--orange);
@@ -139,9 +141,16 @@ $size_btn_open: 75px;
   border-radius: 50%;
   text-align: left;
   box-shadow: -2px 0 5px 2px rgba(0, 0, 0, 0.3);
+  z-index: 10;
   cursor: pointer;
   @include media-max(900px) {
     display: block;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent;
+    }
   }
 
   img {

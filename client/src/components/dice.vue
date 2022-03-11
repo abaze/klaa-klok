@@ -31,15 +31,33 @@ export default {
   data() {
     return {
       FacesEnum: [
-        { label: "tiger", value: "0, 0, 0, 0deg" },
-        { label: "crab", value: "0, 1, 0, 90deg" },
-        { label: "pumpkin", value: "0, 1, 0, 180deg" },
-        { label: "fish", value: "0, 1, 0, 270deg" },
-        { label: "shrimp", value: "1, 0, 0, 90deg" },
-        { label: "chicken", value: "1, 0, 0, 270deg" },
+        {
+          label: "tiger",
+          rotate: { x: "20deg", y: "0deg", z: "0deg" },
+        },
+        {
+          label: "crab",
+          rotate: { x: "20deg", y: "90deg", z: "0deg" },
+        },
+        {
+          label: "pumpkin",
+          rotate: { x: "20deg", y: "180deg", z: "0deg" },
+        },
+        {
+          label: "fish",
+          rotate: { x: "20deg", y: "270deg", z: "0deg" },
+        },
+        {
+          label: "shrimp",
+          rotate: { x: "110deg", y: "0deg", z: "0deg" },
+        },
+        {
+          label: "chicken",
+          rotate: { x: "290deg", y: "0deg", z: "0deg" },
+        },
       ],
       dice: null,
-      rotateTo: null,
+      faceAngle: null,
     };
   },
   computed: {
@@ -64,8 +82,11 @@ export default {
   },
   methods: {
     animateDice(randomFace) {
-      this.rotateTo = this.FacesEnum[randomFace].value;
-      this.dice.style.setProperty("--rotateTo", this.rotateTo);
+      this.faceAngle = this.FacesEnum[randomFace].rotate;
+      this.dice.style.setProperty(
+        "--rotateTo",
+        `rotateX(${this.faceAngle.x}) rotateY(${this.faceAngle.y}) rotateZ(${this.faceAngle.z})`
+      );
 
       // hack pour restart l'animation correctement
       void this.dice.offsetWidth;
@@ -86,14 +107,14 @@ export default {
 .dice {
   --diceSize: 70px;
   --animationSpeed: 1.5s;
-  --rotateTo: 0, 0, 0, 0deg;
+  --rotateTo: rotateX(20deg) rotateY(0deg) rotateZ(0deg);
 
   position: relative;
   width: var(--diceSize);
   height: var(--diceSize);
   z-index: 1;
   transform-style: preserve-3d;
-  transform: translateY(0) rotate3d(var(--rotateTo));
+  transform: translateY(0) var(--rotateTo);
 
   @include media-max(450px) {
     --diceSize: 50px;
@@ -107,30 +128,30 @@ export default {
     $high: -50vh;
     @keyframes bounceDice {
       0% {
-        transform: translateY(0) rotate3d(0, 0, 0, 0deg);
+        transform: translateY(0) scale(1) rotate3d(0, 0, 0, 0deg);
       }
       15% {
-        transform: translateY($high) rotate3d(1, 0, 1, -360deg);
+        transform: translateY($high) scale(1.5) rotate3d(1, 0, 1, -360deg);
         animation-timing-function: ease-in;
       }
       30% {
-        transform: translateY(0) rotate3d(1, 0, 1, -360deg);
+        transform: translateY(0) scale(1) rotate3d(1, 0, 1, -360deg);
         animation-timing-function: ease-out;
       }
       45% {
-        transform: translateY(calc($high/2)) rotate3d(var(--rotateTo));
+        transform: translateY(calc($high/2)) scale(1.25) var(--rotateTo);
         animation-timing-function: ease-in;
       }
       60% {
-        transform: translateY(0) rotate3d(var(--rotateTo));
+        transform: translateY(0) scale(1) var(--rotateTo);
         animation-timing-function: ease-out;
       }
       75% {
-        transform: translateY(calc($high/5)) rotate3d(var(--rotateTo));
+        transform: translateY(calc($high/5)) scale(1.1) var(--rotateTo);
         animation-timing-function: ease-in;
       }
       100% {
-        transform: translateY(0px) rotate3d(var(--rotateTo));
+        transform: translateY(0px) scale(1) var(--rotateTo);
         animation-timing-function: ease-out;
       }
     }
@@ -180,15 +201,22 @@ export default {
   }
 }
 .dice-shaddow {
-  --diceSize: 100px;
+  --diceSize: 70px;
+  --transX: 0%;
+  --transY: 30%;
+  @include media-max(450px) {
+    --diceSize: 50px;
+    --transX: 0%;
+    --transY: 45%;
+  }
   position: absolute;
-  width: 100%;
+  width: var(--diceSize);
   height: var(--diceSize);
   left: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 30%;
-  transform: translateY(50%) scaleX(1.1) scaleY(0.2);
+  transform: translate(var(--transX), var(--transY)) scale(1);
 
   &.rolled {
     animation: scaleShaddow 1.5s ease-in-out;
@@ -198,26 +226,26 @@ export default {
 
     @keyframes scaleShaddow {
       0% {
-        transform: translateY(50%) scaleX(1.1) scaleY(0.2);
+        transform: translate(var(--transX), var(--transY)) scale(1.1);
       }
       15% {
-        transform: translateY(50%) scaleX(0.5) scaleY(0.2);
+        transform: translate(var(--transX), var(--transY)) scale(0.5);
       }
       30% {
-        transform: translateY(50%) scaleX(1.1) scaleY(0.2);
+        transform: translate(var(--transX), var(--transY)) scale(1.1);
       }
       45% {
-        transform: translateY(50%) scaleX(0.5) scaleY(0.2);
+        transform: translate(var(--transX), var(--transY)) scale(0.5);
       }
       60% {
-        transform: translateY(50%) scaleX(1.1) scaleY(0.1);
+        transform: translate(var(--transX), var(--transY)) scale(1.1);
         animation-timing-function: ease-in;
       }
       75% {
-        transform: translateY(50%) scaleX(0.7) scaleY(0.2);
+        transform: translate(var(--transX), var(--transY)) scale(0.7);
       }
       100% {
-        transform: translateY(50%) scaleX(1.1) scaleY(0.2);
+        transform: translate(var(--transX), var(--transY)) scale(1.1);
       }
     }
   }

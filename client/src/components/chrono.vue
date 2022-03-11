@@ -2,29 +2,20 @@
   <div class="box chrono">
     <!-- SI LA PARTIE EST PRETE -->
     <template v-if="game.allPlayersAreHere && game.gameIsReady">
-      <template v-if="!chrono.chronoIsFinish">
-        <div class="zone-time">
-          <img
-            src="../assets/board/chrono.png"
-            width="60"
-            alt="Temps restant : "
-          />
+      <div class="zone-time">
+        <img
+          src="../assets/board/chrono.svg"
+          width="60"
+          alt="Temps restant : "
+        />
 
-          <div class="time">{{ chrono.chrono }}</div>
-        </div>
-      </template>
-      <template v-else>
-        <p>Le chrono est terminé !</p>
-        <div class="align-self-center">
-          <i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>
-          <span class="sr-only">Loading...</span>
-        </div>
-      </template>
+        <div class="time">{{ chrono.chrono }}</div>
+      </div>
     </template>
     <template v-else>
       <div class="zone-time">
         <img
-          src="../assets/board/chrono.png"
+          src="../assets/board/chrono.svg"
           width="60"
           alt="Temps restant : "
         />
@@ -87,9 +78,11 @@ export default {
 
 <style lang="scss">
 .chrono {
-  grid-area: chrono;
-
+  border-radius: 15px;
+  box-shadow: 0 5px 5px 2px rgba(0, 0, 0, 0.7);
   font-family: $fontBangers;
+  padding: 0.25rem 1rem !important;
+  backdrop-filter: blur(2px);
   .zone-time {
     position: relative;
     display: flex;
