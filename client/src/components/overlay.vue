@@ -107,10 +107,7 @@
             Avec <span class="orange">{{ isAWinner[0].gains }} €</span> dans la
             poche net d'impôts !'
           </h2>
-          <p>
-            Il mérite tout votre respect à partir d'aujourd'hui bande de
-            crevetche !!
-          </p>
+          <p>Il mérite tout votre respect à partir d'aujourd'hui !!</p>
         </template>
         <button class="btn" @click="restartGame">Recommencer</button>
         <div class="break"></div>
