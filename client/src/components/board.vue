@@ -4,7 +4,7 @@
       <div class="content-faces">
         <div
           v-for="face in faces"
-          @click="!facesDejaMise.includes(face.id) && selectFace($event)"
+          @click.stop="!facesDejaMise.includes(face.id) && selectFace($event)"
           :key="face.id"
           :class="[
             'face ' + face.id,
@@ -19,6 +19,11 @@
               :class="mise.player.class"
               v-if="mise.face === face.id"
               :key="index"
+              @click.stop="
+                !chronoIsFinish &&
+                  mise.player.id === myPlayerId &&
+                  deleteMise($event, mise)
+              "
             >
               <span
                 class="close-mise"
@@ -188,7 +193,7 @@ export default {
         border-radius: 50%;
         cursor: pointer;
         overflow: hidden;
-        animation: rotateFace 10s infinite linear;
+        /*animation: rotateFace 10s infinite linear;*/
 
         @keyframes scaleShaddow {
           from {
