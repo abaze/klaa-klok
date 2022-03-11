@@ -69,6 +69,7 @@ $size_btn_open: 75px;
     position: relative;
     display: flex;
     width: 100%;
+    height: 16vh;
     align-items: center;
     flex-wrap: wrap;
     padding: 1rem 0.5rem;

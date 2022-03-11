@@ -30,6 +30,35 @@ Schema d'une room :
  **/
 let rooms = [];
 
+// UTILS
+function removePlayer(socket) {
+  rooms.forEach((room, indexRoom) => {
+    room.playersList.forEach((player, indexPlayer) => {
+      if (player.id === socket.id) {
+        console.log("liste avant : ", rooms[indexRoom].playersList);
+        console.log(`${player.name} vient de partir !`);
+        // on broadcast aux autres players l'id du player à supprimer de leur liste
+        socket.broadcast.to(room.roomId).emit("player_leave", {
+          id: rooms[indexRoom].roomId,
+          data: player,
+        });
+
+        // on supprime egalement le player cote BACK
+        rooms[indexRoom].playersList.splice(indexPlayer, 1);
+        console.log("liste apres : ", rooms[indexRoom].playersList);
+        // si après delete il n'y a plus aucun joueur, on kill la room via le code room
+        if (!rooms[indexRoom].playersList) {
+          const idRoom = rooms[indexRoom].roomId;
+          console.log(`Bon bah y a plus de joueur dans la room ${idRoom}`);
+          rooms.splice(indexRoom, 1);
+          // on delete l'id room du tableau des id rooms dispo
+          roomsIdAvailable.splice(roomsIdAvailable.indexOf(idRoom), 1);
+        }
+      }
+    });
+  });
+}
+
 io.on("connection", function (socket) {
   // des l'arrivée du player sur le site
   // on transmet l'id de session au front
@@ -140,9 +169,6 @@ io.on("connection", function (socket) {
   //le mainPlayer vient de lancer les dés
   // le mainPlayer nous envoie les randomFace de chacun de ses dés + la key du dés concerné
   socket.on("you_can_throw_dices", ({ id, data }) => {
-    console.log(
-      `BACK : le mainPlayer nous envoie ces random : ${data.face1} et ${data.face2}`
-    );
     // on les send direct aux autres player pour qu'ils aient le mm resultat
     socket.broadcast.to(id).emit("send_dices_faces", {
       id,
@@ -151,40 +177,16 @@ io.on("connection", function (socket) {
         face2: data.face2,
       },
     });
-    console.log(
-      `BACK : on broadcast aux autres ces random : ${data.face1} et ${data.face2}`
-    );
   });
 
   // ETAPE - DECONNEXION
   socket.on("disconnect", () => {
-    rooms.forEach((room, indexRoom) => {
-      room.playersList.forEach((player, indexPlayer) => {
-        if (player.id === socket.id) {
-          console.log("liste avant : ", rooms[indexRoom].playersList);
-          console.log(`${player.name} vient de partir !`);
-          // on broadcast aux autres players l'id du player à supprimer de leur liste
-          socket.broadcast.to(room.roomId).emit("player_leave", {
-            id: rooms[indexRoom].roomId,
-            data: player,
-          });
+    removePlayer(socket);
+  });
 
-          // on supprime egalement le player cote BACK
-          rooms[indexRoom].playersList.splice(indexPlayer, 1);
-          console.log("liste apres : ", rooms[indexRoom].playersList);
-          // si après delete il n'y a plus aucun joueur, on kill la room via le code room
-          if (!rooms[indexRoom].playersList) {
-            const idRoom = rooms[indexRoom].roomId;
-            console.log(`Bon bah y a plus de joueur dans la room ${idRoom}`);
-            rooms.splice(indexRoom, 1);
-            // on delete l'id room du tableau des id rooms dispo
-            roomsIdAvailable.splice(roomsIdAvailable.indexOf(idRoom), 1);
-          }
-        }
-      });
-    });
-    /*console.log(rooms[0].playersList[0].id);
-    console.log(socket.id);*/
+  // CUSTOM DECONNEXION (si le player refresh ou change de page on le remove)
+  socket.on("player_change_url", (player) => {
+    removePlayer(player);
   });
 
   // Notify all users that you'r typing

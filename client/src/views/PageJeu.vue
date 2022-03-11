@@ -61,6 +61,9 @@ export default {
     },
   },
   watch: {
+    $route() {
+      SocketIO.emit("player_change_url", this.player);
+    },
     playersList: {
       deep: true,
       // on watch la liste des participants pour savoir si tlm est la

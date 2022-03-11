@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&family=Atma:wght@400;600&family=Bangers&display=swap");
+:root {
+  --purple: rgb(81, 75, 165);
+  --green: rgb(35, 177, 7);
+  --red: rgb(185, 24, 24);
+  --orange: rgb(240, 109, 1);
+  --grey: #929ab0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Atma", cursive;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+#errorPage {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--purple);
+  color: #fff;
+}
+
+#errorPage:before {
+  content: "404";
+  position: fixed;
+  left: 50%;
+  top: 0;
+  text-align: center;
+  font-size: 100vh;
+  color: rgba(255, 255, 255, 0.1);
+  font-family: "Bangers", cursive;
+  z-index: 0;
+  -webkit-transform: translateX(-50%) translateY(0);
+          transform: translateX(-50%) translateY(0);
+}
+
+#errorPage h1 {
+  font-family: "Atma", cursive;
+  font-size: 2rem;
+  z-index: 1;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+#errorPage h2 {
+  font-weight: 400;
+}
+
+#errorPage .btn {
+  all: unset;
+  display: block;
+  background: var(--orange);
+  text-align: center;
+  text-transform: uppercase;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  padding: 0.5rem 1.5rem;
+  color: #fff;
+  margin: 1rem auto;
+  cursor: pointer;
+  -webkit-transition: -webkit-box-shadow 250ms linear;
+  transition: -webkit-box-shadow 250ms linear;
+  transition: box-shadow 250ms linear;
+  transition: box-shadow 250ms linear, -webkit-box-shadow 250ms linear;
+  z-index: 1;
+  font-weight: 600;
+}
+/*# sourceMappingURL=error.css.map */

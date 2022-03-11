@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&family=Atma:wght@400;600&family=Bangers&display=swap");
+
+$fontRoboto: "Roboto", sans-serif;
+$fontAtma: "Atma", cursive;
+$fontBangers: "Bangers", cursive;
+
+:root {
+  --purple: rgb(81, 75, 165);
+  --green: rgb(35, 177, 7);
+  --red: rgb(185, 24, 24);
+  --orange: rgb(240, 109, 1);
+  --grey: #929ab0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: $fontAtma;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+#errorPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--purple);
+  color: #fff;
+
+  &:before {
+    content: "404";
+    position: fixed;
+    left: 50%;
+    top: 0;
+    text-align: center;
+    font-size: 100vh;
+    color: rgba(255, 255, 255, 0.1);
+    font-family: $fontBangers;
+    z-index: 0;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  h1 {
+    font-family: $fontAtma;
+    font-size: 2rem;
+    z-index: 1;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-weight: 400;
+  }
+
+  .btn {
+    all: unset;
+    display: block;
+    background: var(--orange);
+    text-align: center;
+    text-transform: uppercase;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    color: #fff;
+    margin: 1rem auto;
+    cursor: pointer;
+    transition: box-shadow 250ms linear;
+    z-index: 1;
+    font-weight: 600;
+  }
+}
