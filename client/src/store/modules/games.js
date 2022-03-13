@@ -5,6 +5,7 @@ export default {
   state() {
     return {
       game: {
+        mode: null,
         roomId: null,
         limitPlayers: null,
         gameNumber: 0,
@@ -24,6 +25,9 @@ export default {
     },
     SET_GAME_NUMBER(state, num) {
       state.game.gameNumber = num;
+    },
+    SET_MODE(state, mode) {
+      state.game.mode = mode;
     },
     SET_ROOM_ID(state, num) {
       state.game.roomId = num;
@@ -68,9 +72,12 @@ export default {
       commit("INIT_GAME_DATA", data);
     },
     createGame({ commit }, options) {
-      const { roomId, limitPlayers } = options;
-
-      commit("SET_ROOM_ID", roomId);
+      const { roomId, mode, limitPlayers } = options;
+      // si on est en multi on store l'id room pour le BACK
+      if (mode === "multiplayer") {
+        commit("SET_ROOM_ID", roomId);
+      }
+      commit("SET_MODE", mode);
       commit("SET_LIMIT_PLAYERS", limitPlayers);
     },
     setRoomID({ commit }, id) {
@@ -142,6 +149,22 @@ export default {
     setMainPlayer({ commit }, player) {
       commit("SET_MAIN_PLAYER", player);
     },
+    nextMainPlayer({ dispatch, state }) {
+      const currentMainPlayer = state.game.mainPlayer;
+      const indexCurrentMainPlayer = state.game.playersList.findIndex(
+        (player) => currentMainPlayer.id === player.id
+      );
+      const countPlayers = state.game.playersList.length;
+      let nextMainPlayer;
+      // si le current Main player est le dernier joueur dla liste, on revient au 1er
+      if (indexCurrentMainPlayer - 1 === countPlayers) {
+        nextMainPlayer = state.game.playersList[0];
+      } else {
+        // sinon on focus sur le player suivant dans game.playersList
+        nextMainPlayer = state.game.playersList[indexCurrentMainPlayer + 1];
+      }
+      dispatch("setMainPlayer", nextMainPlayer);
+    },
     readyToPlay({ commit }, value) {
       commit("SET_GAME_IS_READY", value);
     },
@@ -175,6 +198,8 @@ export default {
       dispatch("players/resetCurrentMises", {}, { root: true });
       // on clear tous les gains dans playersGains
       dispatch("players/resetPlayersGains", {}, { root: true });
+      // on change de Main Player (on passe au player suivant)
+      dispatch("nextMainPlayer");
     },
     // on init et on lance une new partie
     startGame({ commit, state, dispatch }) {

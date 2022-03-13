@@ -128,6 +128,17 @@ export default {
         }, 2000);
       }
     },
+    chronoIsFinish(value) {
+      // only in SOLO mode
+      // si le chrono est terminé on et que le CPU est le mainPlayer, on lui dit de lancer les dés après 2s
+      if (value) {
+        if (this.game.mainPlayer.id === "cpu") {
+          setTimeout(() => {
+            this.goPlay();
+          }, 2000);
+        }
+      }
+    },
   },
   methods: {
     ...mapActions({
@@ -147,28 +158,41 @@ export default {
     },
     goPlay(face1 = null, face2 = null) {
       this.resetChosenFaces();
-      // si c'est le mainPlayer qui lance, il init les 2 value randoms des des
-      if (this.player.id === this.game.mainPlayer.id) {
+      /** MODE MUTLI */
+      if (this.game.mode === "multiplayer") {
+        // si c'est le mainPlayer qui lance, il init les 2 value randoms des des
+        if (this.player.id === this.game.mainPlayer.id) {
+          const min = 0;
+          const max = 6;
+          this.face1 = Math.floor(Math.random() * (max - min) + min);
+          this.face2 = Math.floor(Math.random() * (max - min) + min);
+          this.throwDice = true;
+          SocketIO.emit("you_can_throw_dices", {
+            id: this.game.roomId,
+            data: {
+              face1: this.face1,
+              face2: this.face2,
+            },
+          });
+          this.getChosenFace({ face1: this.face1, face2: this.face2 });
+        } else {
+          // quand les autres players reçoivent les faces, ils ont juste à les inits
+          this.face1 = face1;
+          this.face2 = face2;
+          this.throwDice = true;
+          this.getChosenFace({ face1: this.face1, face2: this.face2 });
+        }
+      }
+
+      if (this.game.mode === "solo") {
         const min = 0;
         const max = 6;
         this.face1 = Math.floor(Math.random() * (max - min) + min);
         this.face2 = Math.floor(Math.random() * (max - min) + min);
         this.throwDice = true;
-        SocketIO.emit("you_can_throw_dices", {
-          id: this.game.roomId,
-          data: {
-            face1: this.face1,
-            face2: this.face2,
-          },
-        });
-        this.getChosenFace({ face1: this.face1, face2: this.face2 });
-      } else {
-        // quand les autres players reçoivent les faces, ils ont juste à les inits
-        this.face1 = face1;
-        this.face2 = face2;
-        this.throwDice = true;
         this.getChosenFace({ face1: this.face1, face2: this.face2 });
       }
+
       this.audioDices.volume = 0.5;
       this.audioDices.play();
 

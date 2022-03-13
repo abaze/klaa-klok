@@ -1,6 +1,7 @@
 import * as VueRouter from "vue-router";
 
 const Home = () => import("../views/Home.vue");
+const PageJeuSolo = () => import("../views/PageJeuSolo.vue");
 const PageJeu = () => import("../views/PageJeu.vue");
 const NotFoundPage = () => import("../views/NotFound.vue");
 
@@ -11,6 +12,11 @@ const router = VueRouter.createRouter({
       path: "/",
       name: "Home",
       component: Home,
+    },
+    {
+      path: "/arcade/game",
+      name: "PageJeuSolo",
+      component: PageJeuSolo,
     },
     {
       path: "/game/:roomId",

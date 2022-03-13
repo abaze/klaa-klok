@@ -6,10 +6,7 @@
           v-for="face in faces"
           @click.stop="!facesDejaMise.includes(face.id) && selectFace($event)"
           :key="face.id"
-          :class="[
-            'face ' + face.id,
-            { disable: chronoIsFinish || !game.gameIsReady },
-          ]"
+          :class="['face ' + face.id, { disable: stopMise }]"
           :data-face="face.id"
           :title="face.label"
         >
@@ -62,6 +59,10 @@ export default {
       dataToOverlay: (state) => state.overlay.data,
       game: (state) => state.games.game,
     }),
+    // var qui nous dit juste si on peut miser ou non
+    stopMise() {
+      return this.chronoIsFinish || !this.game.gameIsReady;
+    },
     // function qui interdit le clic sur une face déjà misée
     facesDejaMise() {
       const mesMises = [];
@@ -72,6 +73,17 @@ export default {
       });
       // on inject le tableau dans un new Set() ca permet de retirer les doublons
       return mesMises;
+    },
+  },
+  watch: {
+    stopMise(value) {
+      // si la game est ready et qu'on est en mode solo
+      // on va dire au CPU de miser
+      if (!value) {
+        if (this.game.mode === "solo") {
+          this.cpuPlay();
+        }
+      }
     },
   },
   methods: {
@@ -96,30 +108,97 @@ export default {
       // on delete la mise dans l'archive des mises total du joueur
       this.deletePlayerMise(mise);
 
-      // on averti les autres joueurs que jai remove une mise
-      SocketIO.emit("player_removed_mise", {
-        id: this.game.roomId,
-        data: mise,
-      });
+      // Sockets ONLY in multiplayer mode
+      if (this.game.mode === "multiplayer") {
+        // on averti les autres joueurs que jai remove une mise
+        SocketIO.emit("player_removed_mise", {
+          id: this.game.roomId,
+          data: mise,
+        });
+      }
 
       // on save la valeur de la mise en cours dans le store
       this.calculMise({ action: "remove", ...mise });
     },
+    cpuPlay() {
+      /**CPU DATA */
+      const cpu = this.game.playersList.filter(
+        (player) => player.id === "cpu"
+      )[0];
+      /**DICES DATA */
+      const faces = this.faces;
+      const totalChoices = faces.length;
+      const totalFacesToMise = Math.floor(Math.random() * totalChoices) + 1;
+      /** MONEY DATA */
+      const rangeMise = [
+        5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90,
+        95, 100,
+      ];
+      let totalMoney = cpu.totalGains;
+      console.log(
+        `Avec ses ${totalMoney} € ${cpu.name} veut miser sur ${totalFacesToMise} faces...`
+      );
+      // on get X choix unique qui correspondent aux faces du dés (ex: CPU veut 3 mises, on random 3 uniques faces)
+      const cpuChoices = new Set();
+      while (cpuChoices.size !== totalFacesToMise) {
+        cpuChoices.add(Math.floor(Math.random() * totalChoices) + 1);
+      }
+      // on loop sur ses X choix et on va miser
+      cpuChoices.forEach((choice) => {
+        if (totalMoney) {
+          // on get un random de mise (ex : 10 ou 25 ou 5 etc)
+          let randomRange = Math.floor(Math.random() * rangeMise.length) + 1;
+          let randomMise = rangeMise[randomRange - 1];
+          if (randomMise > totalMoney) {
+            // si la mise, qu'on veut, depasse notre cagnotte, on loop sur un new random acceptable
+            while (randomMise > totalMoney) {
+              rangeMise.splice(randomRange, 1);
+              randomRange = Math.floor(Math.random() * rangeMise.length) + 1;
+              randomMise = rangeMise[randomRange - 1];
+            }
+          }
+          totalMoney -= randomMise;
+          console.log(
+            `${cpu.name} veut miser ${randomMise}€ sur ${
+              faces[choice - 1].label
+            }...`
+          );
+          setTimeout(() => {
+            const miseToSend = {
+              player: cpu,
+              face: faces[choice - 1].id,
+              mise: parseInt(randomMise),
+            };
+
+            // on STORE dans le tableau de toutes les mises de la partie
+            this.savePlayerMise(miseToSend);
+          }, 1000 * Math.floor(Math.random() * 20) + 1);
+        } else {
+          console.log(
+            `plus d'argent à miser sur ${faces[choice - 1].label}....`
+          );
+          return 0;
+        }
+      });
+    },
   },
   created() {
-    // on recupere du BACK, les mises adverses que le BACK nous communique
-    SocketIO.on("send_mise_adverse", ({ id, data }) => {
-      if (this.game.roomId === id) {
-        this.savePlayerMise(data);
-      }
-    });
+    // Sockets ONLY in multiplayer mode
+    if (this.game.mode === "multiplayer") {
+      // on recupere du BACK, les mises adverses que le BACK nous communique
+      SocketIO.on("send_mise_adverse", ({ id, data }) => {
+        if (this.game.roomId === id) {
+          this.savePlayerMise(data);
+        }
+      });
 
-    // on recupere du BACK, les mises adverses à remove
-    SocketIO.on("send_remove_mise_adverse", ({ id, data }) => {
-      if (this.game.roomId === id) {
-        this.deletePlayerMise(data);
-      }
-    });
+      // on recupere du BACK, les mises adverses à remove
+      SocketIO.on("send_remove_mise_adverse", ({ id, data }) => {
+        if (this.game.roomId === id) {
+          this.deletePlayerMise(data);
+        }
+      });
+    }
   },
 };
 </script>
@@ -193,7 +272,7 @@ export default {
         border-radius: 50%;
         cursor: pointer;
         overflow: hidden;
-        /*animation: rotateFace 10s infinite linear;*/
+        animation: rotateFace 10s infinite linear;
 
         @keyframes scaleShaddow {
           from {
