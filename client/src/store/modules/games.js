@@ -157,7 +157,7 @@ export default {
       const countPlayers = state.game.playersList.length;
       let nextMainPlayer;
       // si le current Main player est le dernier joueur dla liste, on revient au 1er
-      if (indexCurrentMainPlayer - 1 === countPlayers) {
+      if (indexCurrentMainPlayer + 1 === countPlayers) {
         nextMainPlayer = state.game.playersList[0];
       } else {
         // sinon on focus sur le player suivant dans game.playersList

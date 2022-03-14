@@ -249,14 +249,26 @@ export default {
       this.prepareNextGame();
     },
     restartGame() {
-      this.initOptions({
-        allPlayersAreHere: this.game.allPlayersAreHere,
-        gameIsReady: false,
-        gameNumber: 0,
-        gameOver: false,
-        isWinner: false,
-        limitPlayers: this.game.limitPlayers,
-      });
+      // si on est en mutli
+      if (this.game.mode === "multiplayer") {
+        this.initOptions({
+          allPlayersAreHere: this.game.allPlayersAreHere,
+          gameIsReady: false,
+          gameNumber: 0,
+          gameOver: false,
+          isWinner: false,
+          limitPlayers: this.game.limitPlayers,
+        });
+      } else {
+        this.initOptions({
+          allPlayersAreHere: true,
+          gameIsReady: false,
+          gameNumber: 0,
+          gameOver: false,
+          isWinner: false,
+          limitPlayers: 2,
+        });
+      }
       this.newPartie();
     },
   },

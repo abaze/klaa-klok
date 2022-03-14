@@ -43,16 +43,6 @@ export default {
         msg: "",
         label: "",
       },
-      // profil du CPU PLAYER
-      cpuPlayer: {
-        id: "cpu",
-        name: "CPU",
-        class: "player-1",
-        isReady: true,
-        gameOver: false,
-        currentMise: 0,
-        totalGains: 100,
-      },
       audioGame: new Audio(require("@/assets/sounds/game.mp3")),
     };
   },
@@ -61,6 +51,7 @@ export default {
       game: (state) => state.games.game,
       playersList: (state) => state.games.game.playersList,
       player: (state) => state.players.player,
+      cpuPlayer: (state) => state.players.cpuPlayer,
       gameIsReady: (state) => state.games.game.gameIsReady,
     }),
     quiALaMain() {

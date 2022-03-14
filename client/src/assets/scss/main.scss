@@ -245,17 +245,20 @@ p {
   }
 
   &.glow {
-    background-color: rgba(240, 109, 1, 0.4);
-    backdrop-filter: blur(2px);
+    box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
+    background-image: url(../assets/board/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
     border: 3px solid #fff;
     font-family: $fontBangers;
+    font-weight: lighter;
     animation: bounce 500ms ease-in-out infinite alternate;
     @keyframes bounce {
       from {
         transform: scale(1);
       }
       to {
-        transform: scale(1.4);
+        transform: scale(1.1);
       }
     }
   }

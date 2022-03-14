@@ -22,10 +22,10 @@
         <div class="screen-choice">
           <p>Entrez votre nom</p>
           <input
-            v-model="username"
+            v-model.trim="username"
             type="text"
             id="userName"
-            maxlength="20"
+            maxlength="10"
             :readonly="loaderSave"
             ref="input_username"
             autocomplete="off"
@@ -125,9 +125,9 @@
               <p>Entrez le code salon à rejoindre :</p>
               <div class="align-h btn-group">
                 <input
-                  v-model="codeSalon"
+                  v-model.trim="codeSalon"
                   type="text"
-                  id="userName"
+                  id="codeSalon"
                   maxlength="5"
                   :class="[
                     { good: isCodeSalonValid },
@@ -163,7 +163,7 @@
             >
               <p>Entrez votre nom</p>
               <input
-                v-model="username"
+                v-model.trim="username"
                 type="text"
                 id="userName"
                 maxlength="20"
@@ -408,7 +408,6 @@ export default {
 
   &.copied {
     color: yellow;
-    font-size: 2.5rem;
     &:after {
       content: "code copié !";
       position: absolute;
@@ -416,7 +415,6 @@ export default {
       left: 0;
       bottom: -5px;
       font-size: 0.8rem;
-      border: 1px solid;
     }
   }
 }

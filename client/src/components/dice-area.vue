@@ -96,6 +96,7 @@ export default {
       throwIsDone: (state) => state.dices.throwIsDone,
       game: (state) => state.games.game,
       player: (state) => state.players.player,
+      cpuPlayer: (state) => state.players.cpuPlayer,
     }),
     plurial() {
       return this.game.playersList.length > 1 ? "s" : "";
@@ -155,6 +156,12 @@ export default {
       // Quand le player est ready, on le signale au STORE
       // le watcher va EMIT au BACK
       this.setPlayerIsReady({ value: true, player: this.player });
+
+      // si on est en SOLO on met à Ready True le CPU egalement
+      if (this.game.mode === "solo") {
+        // on met cpu a Ready
+        this.setPlayerIsReady({ value: true, player: this.cpuPlayer });
+      }
     },
     goPlay(face1 = null, face2 = null) {
       this.resetChosenFaces();

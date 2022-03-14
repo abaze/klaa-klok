@@ -79,10 +79,13 @@ export default {
 <style lang="scss">
 .chrono {
   border-radius: 15px;
-  box-shadow: 0 5px 5px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
+  background-image: url(../assets/board/bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
   font-family: $fontBangers;
   padding: 0.25rem 1rem !important;
-  backdrop-filter: blur(2px);
+
   .zone-time {
     position: relative;
     display: flex;

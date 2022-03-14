@@ -13,6 +13,15 @@ export default {
         currentMise: 0,
         totalGains: 100,
       },
+      cpuPlayer: {
+        id: "cpu",
+        name: "CPU",
+        class: "player-1",
+        isReady: true,
+        gameOver: false,
+        currentMise: 0,
+        totalGains: 100,
+      },
       playersGains: [],
       creditStart: 100,
     };
@@ -32,6 +41,9 @@ export default {
       state.player.class = name;
     },
     SET_PLAYER_IS_READY(state, bool) {
+      state.player.isReady = bool;
+    },
+    SET_CPU_PLAYER_IS_READY(state, bool) {
       state.player.isReady = bool;
     },
     SET_PLAYER_IS_GAME_OVER(state, bool) {
@@ -73,8 +85,11 @@ export default {
       // si le player current est concerné on maj le STORE
       if (player.id === state.player.id) {
         commit("SET_PLAYER_IS_READY", value);
-      } else {
-        player.isReady = value;
+      }
+
+      // Si le CPU tente de se mettre à ready
+      if (player.id === state.cpuPlayer.id) {
+        commit("SET_CPU_PLAYER_IS_READY", value);
       }
 
       // on maj game.playersList

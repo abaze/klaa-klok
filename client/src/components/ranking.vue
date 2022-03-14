@@ -78,12 +78,10 @@ $size_btn_open: 75px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
-    /*background-image: url(../assets/board/bg.jpg);
-    background-size: contain;
-    background-repeat: repeat;*/
-    background: rgba(0, 0, 0, 0.4);
+    background-image: url(../assets/board/bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
     overflow: hidden;
-    backdrop-filter: blur(2px);
 
     &:before {
       position: absolute;
