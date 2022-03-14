@@ -103,6 +103,7 @@ export default {
 <style lang="scss">
 .dice-container {
   position: relative;
+  margin: 0 0.5rem;
 }
 .dice {
   --diceSize: 70px;
@@ -112,7 +113,7 @@ export default {
   position: relative;
   width: var(--diceSize);
   height: var(--diceSize);
-  z-index: 1;
+  z-index: 10;
   transform-style: preserve-3d;
   transform: translateY(0) var(--rotateTo);
 

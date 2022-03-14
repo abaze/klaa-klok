@@ -15,7 +15,9 @@
             @submit.prevent="sendMise()"
           >
             <div class="face-mise" :class="dataToOverlay.face"></div>
-            <label for="input_mise">il vous reste {{ creditRestant }} €</label
+            <label for="input_mise"
+              >il vous reste
+              <span class="credit-restant">{{ creditRestant }} €</span></label
             ><br />
             <input
               ref="input_mise"
@@ -28,12 +30,12 @@
               class="btn"
               type="submit"
               value="Validation"
-              v-show="isMiseValid"
+              :disabled="!isMiseValid"
             />
           </form>
           <!-- si player na plus dargent a miser alors on affiche ce message -->
           <p v-else class="alert-msg">
-            Vous n'avez plus d'argent à miser...cheh
+            Ehh ! Vous n'avez plus d'argent à miser...
           </p>
         </template>
         <!-- si chrono fini on affiche le content -->
@@ -95,14 +97,13 @@
       <template v-else>
         <!-- SI GAME OVER GENERAL -->
         <template v-if="isGameOver">
-          <h1>GAME OVER !</h1>
-          <p>Une belle équipe de winners comme on les aime...</p>
+          <h1 class="red">GAME OVER !</h1>
+          <h2>Une belle équipe de winner</h2>
+          <p>...comme on les aime</p>
         </template>
         <!-- SI GAME OVER GENERAL -->
         <template v-if="isAWinner.length">
-          <h1>
-            <span class="orange">{{ isAWinner[0].name }}</span> a gagné !!
-          </h1>
+          <h1 class="green">{{ isAWinner[0].name }} a gagné !!</h1>
           <h2>
             Avec <span class="orange">{{ isAWinner[0].gains }} €</span> dans la
             poche net d'impôts !'
@@ -129,9 +130,6 @@ export default {
       inputMise: null,
       winner: {},
       router: useRouter(),
-      audioPopup: new Audio(require("@/assets/sounds/popup.mp3")),
-      audioGameOver: new Audio(require("@/assets/sounds/game-over.mp3")),
-      audioGameWinner: new Audio(require("@/assets/sounds/winner.mp3")),
     };
   },
 
@@ -172,8 +170,7 @@ export default {
     },
     dataToOverlay(data) {
       if (data) {
-        this.audioPopup.volume = 0.2;
-        this.audioPopup.play();
+        this.playAudio("popup");
       }
     },
     "dataToOverlay.action": function (value) {
@@ -187,14 +184,12 @@ export default {
     },
     isGameOver(isGameOver) {
       if (isGameOver) {
-        this.audioGameOver.volume = 0.7;
-        this.audioGameOver.play();
+        this.playAudio("gameOver");
       }
     },
     isAWinner(isAWinner) {
       if (isAWinner.length > 0) {
-        this.audioGameWinner.volume = 0.7;
-        this.audioGameWinner.play();
+        this.playAudio("gameWinner");
       }
     },
   },
@@ -208,6 +203,7 @@ export default {
       prepareNextGame: "games/prepareNextGame",
       addPlayerGains: "players/addPlayerGains",
       majOneFieldPlayersList: "games/majOneFieldPlayersList",
+      playAudio: "audios/playAudio",
     }),
     closeOverlay() {
       // on kill la popup en lui envoyant des datas à null
@@ -321,11 +317,11 @@ export default {
 
   .close-btn {
     position: absolute;
-    top: 0.1rem;
-    right: 0.25rem;
+    top: 0rem;
+    right: 0.5rem;
     cursor: pointer;
     color: #fff;
-    font-size: 2rem;
+    font-size: 3rem;
   }
 
   .form-mise {
@@ -349,6 +345,13 @@ export default {
       border-radius: 50%;
       margin-bottom: 1rem;
     }
+  }
+
+  .credit-restant {
+    font-size: 2rem;
+    text-shadow: 2px 2px 2px #000;
+    color: yellow;
+    margin-left: 0.5rem;
   }
 
   .results {
@@ -385,10 +388,12 @@ export default {
 
     .results-table {
       width: 100%;
+      border: 1px solid transparent;
 
       th {
         @include media-max(700px) {
-          font-size: 0.7rem;
+          font-size: 0.8rem;
+          font-weight: normal;
         }
 
         &.th-mises {
@@ -402,17 +407,23 @@ export default {
       tr.result-line {
         margin: 0;
         border-bottom: 1px solid #fff;
-        background-color: rgba(36, 109, 243, 0.4);
-        &.active {
-          color: yellow;
-        }
-
+        background-color: rgba(27, 25, 23, 0.616);
         td {
           text-align: center;
+          padding: 1rem;
           @include media-max(700px) {
             font-size: 0.7rem;
-            padding: 0;
+            padding: 0.25rem;
             margin: 0;
+          }
+
+          &:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+          &:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
           }
 
           &.gains {
@@ -426,22 +437,18 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-wrap: nowrap;
             font-size: 0.8rem;
             margin: 0;
             padding: 1rem 0.1rem;
-            @include media-max(700px) {
-              max-width: 180px;
-              margin: auto;
-              flex-wrap: wrap;
-            }
 
             & > span {
               display: flex;
               flex-direction: column;
               justify-content: center;
               .mise-face {
-                width: 40px;
-                height: 40px;
+                width: 70px;
+                height: 70px;
                 aspect-ratio: 1;
                 background-color: #fff;
                 background-position: center;
@@ -451,8 +458,8 @@ export default {
                 border-radius: 10%;
                 margin-bottom: 0.2rem;
                 @include media-max(700px) {
-                  width: 30px;
-                  height: 30px;
+                  width: 35px;
+                  height: 35px;
                   background-size: 80%;
                 }
               }

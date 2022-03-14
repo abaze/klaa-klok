@@ -369,6 +369,13 @@ export default {
   display: flex;
   align-items: center;
   font-family: $fontAtma;
+
+  .content {
+    width: 100%;
+    @include media-max(400px) {
+      border-radius: 0;
+    }
+  }
 }
 .active-players {
   background: rgba(255, 255, 255, 0.5);

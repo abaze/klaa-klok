@@ -87,7 +87,6 @@ export default {
       throwDice: false,
       face1: 0,
       face2: 0,
-      audioDices: new Audio(require("@/assets/sounds/dices.mp3")),
     };
   },
   computed: {
@@ -151,6 +150,7 @@ export default {
       setPlayerIsReady: "players/setPlayerIsReady",
       startGame: "games/startGame",
       majOneFieldPlayersList: "games/majOneFieldPlayersList",
+      playAudio: "audios/playAudio",
     }),
     playerReady() {
       // Quand le player est ready, on le signale au STORE
@@ -200,8 +200,7 @@ export default {
         this.getChosenFace({ face1: this.face1, face2: this.face2 });
       }
 
-      this.audioDices.volume = 0.5;
-      this.audioDices.play();
+      this.playAudio("dices");
 
       // dans les 2 cas on réinit throwDice à false (pour pouvoir relancer les dés après)
       setTimeout(() => {
@@ -256,35 +255,39 @@ export default {
   .group-dices {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     max-width: 300px;
     width: 100%;
   }
 
   input[type="button"] {
     all: unset;
-    margin: 0 1rem;
-    width: 100px;
-    height: 100px;
-    background: rgb(199, 27, 27);
+    width: 90px;
+    height: 90px;
+    background: rgba(199, 27, 27, 1);
     background-size: 200% 200%;
-    background-image: linear-gradient(
-      40deg,
-      rgba(199, 27, 27, 1) 5%,
-      rgba(238, 99, 99, 1) 50%,
-      rgba(255, 0, 0, 1) 100%
-    );
     color: #fff;
     text-transform: uppercase;
     font-weight: 900;
     text-align: center;
     border: 3px solid #fff;
-    border-radius: 50%;
+    border-radius: 15px;
     cursor: pointer;
-    transition: background-position 0.3s linear;
+    animation: play 0.5s ease-in-out infinite;
+
+    @keyframes play {
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+        animation-timing-function: ease-in;
+      }
+    }
 
     &:hover {
-      background-position: -50px -100px;
+      animation: none;
     }
 
     @include media-max(600px) {
@@ -292,7 +295,6 @@ export default {
       height: 50px;
       font-size: 0.6rem;
       font-weight: 300;
-      margin: 0;
     }
   }
 }

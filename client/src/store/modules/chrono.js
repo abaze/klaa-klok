@@ -5,7 +5,7 @@ export default {
   state() {
     return {
       chronoIsFinish: false,
-      initialChronoLimit: 30,
+      initialChronoLimit: 20,
       chrono: "00:00",
       countSeconds: null,
     };

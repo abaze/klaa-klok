@@ -7,6 +7,7 @@ import MisesModule from "./modules/mises.js";
 import DicesModule from "./modules/dices.js";
 import OverlayModule from "./modules/overlay.js";
 import NotificationsModule from "./modules/notifications.js";
+import AudiosModule from "./modules/audios.js";
 
 const store = createStore({
   modules: {
@@ -17,6 +18,7 @@ const store = createStore({
     dices: DicesModule,
     overlay: OverlayModule,
     notifications: NotificationsModule,
+    audios: AudiosModule,
   },
 });
 

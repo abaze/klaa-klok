@@ -46,6 +46,23 @@ $crab: url(../assets/board/crab.svg);
 $chicken: url(../assets/board/chicken.svg);
 $shrimp: url(../assets/board/shrimp.svg);
 
+// COLORS
+.purple {
+  color: var(--purple);
+}
+.green {
+  color: var(--green);
+}
+.red {
+  color: var(--red);
+}
+.orange {
+  color: var(--orange);
+}
+.grey {
+  color: var(--grey);
+}
+
 // PLAYERS COLORS
 $colorP1: #5fad56;
 $colorP2: #f2c14e;
@@ -111,16 +128,17 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  min-width: 330px;
   max-width: 800px;
-  width: 90%;
-  min-height: 33vh;
-  background-color: var(--purple);
+  box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
+  background-image: url(../assets/board/bg.jpg);
+  background-size: 40% 100%;
+  background-repeat: repeat;
   color: #fff;
   border-radius: 20px;
   border: 5px solid #fff;
   padding: 1rem;
   margin: auto;
+  text-shadow: 2px 2px 2px #000;
   animation: moveContent 300ms ease-in;
   @include media-max(700px) {
     border-radius: 0;
@@ -181,18 +199,19 @@ body {
 }
 
 .alert-msg {
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: rgb(255, 255, 255);
 }
 
 /** HEADER TAGS**/
 h1 {
-  font-size: clamp(1em, 1.5vw, 2.2em);
+  font-size: clamp(1.7em, 1.5vw, 2.2em);
   text-align: center;
   text-transform: uppercase;
+  text-shadow: 2px 2px 2px #000;
 }
 h2 {
-  font-size: clamp(1em, 2vw, 2.5em);
+  font-size: clamp(1.4em, 1.2vw, 1.9em);
   text-align: center;
 }
 h3 {
@@ -222,6 +241,7 @@ p {
   font-family: $fontAtma;
   font-weight: bold;
   transition: box-shadow 250ms linear;
+  text-shadow: none;
 
   &.xs {
     padding: 0.5rem;
@@ -252,6 +272,7 @@ p {
     border: 3px solid #fff;
     font-family: $fontBangers;
     font-weight: lighter;
+    font-size: 2rem;
     animation: bounce 500ms ease-in-out infinite alternate;
     @keyframes bounce {
       from {
@@ -332,6 +353,8 @@ input[type="text"] {
   padding: 0.5rem 1.5rem;
   color: rgb(81, 75, 165);
   margin: 0.2rem auto;
+  text-shadow: none;
+  font-size: 1.5rem;
 
   &.good {
     border-color: var(--green);

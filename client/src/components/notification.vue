@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       list_notifications: [],
-      audioNotif: new Audio(require("@/assets/sounds/notif.mp3")),
     };
   },
   computed: {
@@ -31,9 +30,7 @@ export default {
       deep: true,
       handler(notifs) {
         if (notifs.length > 0) {
-          this.list_notifications = notifs;
-          this.audioNotif.volume = 0.5;
-          this.audioNotif.play();
+          this.playAudio("notif");
           notifs.forEach((notif, i) => {
             this.closeNotif(notif.id, i + 1);
           });
@@ -44,6 +41,7 @@ export default {
   methods: {
     ...mapActions({
       removeNotification: "notifications/removeNotification",
+      playAudio: "audios/playAudio",
     }),
     async closeNotif(id, index) {
       // on attend que le DOM soit pret

@@ -45,7 +45,6 @@ export default {
         msg: "",
         label: "",
       },
-      audioGame: new Audio(require("@/assets/sounds/game.mp3")),
     };
   },
   computed: {
@@ -85,6 +84,7 @@ export default {
       addNotification: "notifications/addNotification",
       allPlayersAreHere: "games/allPlayersAreHere",
       setMainPlayer: "games/setMainPlayer",
+      initAudios: "audios/initAudios",
     }),
   },
   created() {
@@ -98,9 +98,7 @@ export default {
           // si il y a des datas alors on fait tous les storages
           if (response.data) {
             // on lance la musique dambiance
-            this.audioGame.volume = 0.25;
-            this.audioGame.loop = true;
-            this.audioGame.play();
+            this.initAudio();
             // on STORE toute la data pour INIT notre game
             this.initGame(response.data);
             // on va determiner une class pour notre joueur (pour pouvoir lui donner une couleur fixe)
@@ -162,9 +160,6 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background-color: var(--green);
-}
 main {
   position: relative;
   width: 100vw;

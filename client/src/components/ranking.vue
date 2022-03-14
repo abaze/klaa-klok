@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "ranking",
   data() {
@@ -42,6 +42,16 @@ export default {
         b.totalGains > a.totalGains ? 1 : a.totalGains > b.totalGains ? -1 : 0
       );
     },
+  },
+  watch: {
+    openRank() {
+      this.playAudio("openRank");
+    },
+  },
+  methods: {
+    ...mapActions({
+      playAudio: "audios/playAudio",
+    }),
   },
 };
 </script>
@@ -140,7 +150,7 @@ $size_btn_open: 75px;
   border-radius: 50%;
   text-align: left;
   box-shadow: -2px 0 5px 2px rgba(0, 0, 0, 0.3);
-  z-index: 10;
+  z-index: 4;
   cursor: pointer;
   @include media-max(900px) {
     display: block;

@@ -43,7 +43,6 @@ export default {
         msg: "",
         label: "",
       },
-      audioGame: new Audio(require("@/assets/sounds/game.mp3")),
     };
   },
   computed: {
@@ -67,14 +66,11 @@ export default {
       addNotification: "notifications/addNotification",
       allPlayersAreHere: "games/allPlayersAreHere",
       setMainPlayer: "games/setMainPlayer",
+      initAudios: "audios/initAudios",
     }),
   },
   created() {
     this.$nextTick(() => {
-      // on lance la musique dambiance
-      this.audioGame.volume = 0.25;
-      this.audioGame.loop = true;
-      this.audioGame.play();
       /** DATA POUR LE CPU PLAYER */
       // on ajoute le CPU dans la liste des players
       this.addPlayer(this.cpuPlayer);
@@ -91,6 +87,10 @@ export default {
       // on previent le STORE que tt le monde est la
       this.allPlayersAreHere(true);
     });
+  },
+  mounted() {
+    // on init les sons du jeu
+    this.initAudios();
   },
 };
 </script>

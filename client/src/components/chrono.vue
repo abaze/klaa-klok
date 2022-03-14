@@ -30,13 +30,6 @@
 import { mapState, mapActions } from "vuex";
 export default {
   name: "chrono",
-  data() {
-    return {
-      audioTimer: new Audio(require("@/assets/sounds/timer.mp3")),
-      audioAlarm: new Audio(require("@/assets/sounds/timer-finish.mp3")),
-    };
-  },
-
   computed: {
     ...mapState({
       chrono: (state) => state.chrono,
@@ -49,28 +42,25 @@ export default {
       handler(value) {
         if (value) {
           this.startChrono();
-          // on lance la musique de fond
-          this.audioAlarm.pause();
-          this.audioAlarm.currentTime = 0;
-
-          this.audioTimer.volume = 0.1;
-          this.audioTimer.loop = true;
-          this.audioTimer.play();
+          // on lance le timer
+          this.pauseAudio("alarm");
+          this.playAudio("timer");
         }
       },
     },
     "chrono.chronoIsFinish": function (isFinish) {
       if (isFinish) {
-        this.audioTimer.pause();
-        this.audioTimer.currentTime = 0;
-        this.audioAlarm.volume = 0.1;
-        this.audioAlarm.play();
+        // on lance le timer
+        this.pauseAudio("timer");
+        this.playAudio("alarm");
       }
     },
   },
   methods: {
     ...mapActions({
       startChrono: "chrono/startChrono",
+      playAudio: "audios/playAudio",
+      pauseAudio: "audios/pauseAudio",
     }),
   },
 };
