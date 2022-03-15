@@ -236,7 +236,7 @@ export default {
       border: 10px solid var(--orange);
       padding: 1rem;
 
-      @include media-max(500px) {
+      @include media-max(515px) {
         min-width: 300px;
         width: min(100vw - 1rem, 90vw);
         grid-template-columns: repeat(2, 1fr);
@@ -245,6 +245,8 @@ export default {
           "tiger crab"
           "pumpkin fish"
           "shrimp chicken";
+        // 200px = footer-area height
+        transform: translateY(calc(45% - 200px));
       }
 
       .face {

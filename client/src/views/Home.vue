@@ -377,9 +377,17 @@ export default {
   font-family: $fontAtma;
 
   .content {
+    border-radius: 32% 68% 25% 75% / 45% 48% 52% 55%;
+    padding: 3rem 0.5rem;
+    text-align: center;
     width: 100%;
     @include media-max(400px) {
       border-radius: 0;
+    }
+
+    form {
+      margin-inline: auto;
+      width: 80%;
     }
   }
 }
@@ -388,11 +396,6 @@ export default {
   border-radius: 15%;
   padding: 1rem;
   text-transform: uppercase;
-  text-align: center;
-}
-.content {
-  border-radius: 32% 68% 25% 75% / 45% 48% 52% 55%;
-  padding: 3rem 0.5rem;
   text-align: center;
 }
 

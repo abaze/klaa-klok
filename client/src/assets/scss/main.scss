@@ -102,7 +102,9 @@ body {
   margin: 0;
   padding: 0;
   font-size: 20px;
+  min-width: 330px;
   width: 100vw;
+  min-height: 100vh;
   height: 100vh;
   overflow: hidden;
   @include media-max(700px) {
@@ -129,6 +131,7 @@ body {
   justify-content: center;
   flex-direction: column;
   max-width: 800px;
+  min-width: 280px;
   box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
   background-image: url(../assets/board/bg.jpg);
   background-size: 40% 100%;
@@ -240,6 +243,7 @@ p {
   cursor: pointer;
   font-family: $fontAtma;
   font-weight: bold;
+  font-size: 1.5rem;
   transition: box-shadow 250ms linear;
   text-shadow: none;
 
@@ -351,10 +355,13 @@ input[type="text"] {
   background: #fff;
   border-radius: 10px;
   padding: 0.5rem 1.5rem;
-  color: rgb(81, 75, 165);
+  color: var(--orange);
   margin: 0.2rem auto;
   text-shadow: none;
   font-size: 1.5rem;
+  font-weight: bold;
+  width: 100%;
+  box-sizing: border-box;
 
   &.good {
     border-color: var(--green);
