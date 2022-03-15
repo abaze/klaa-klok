@@ -98,7 +98,7 @@ export default {
           // si il y a des datas alors on fait tous les storages
           if (response.data) {
             // on lance la musique dambiance
-            this.initAudio();
+            this.initAudios();
             // on STORE toute la data pour INIT notre game
             this.initGame(response.data);
             // on va determiner une class pour notre joueur (pour pouvoir lui donner une couleur fixe)

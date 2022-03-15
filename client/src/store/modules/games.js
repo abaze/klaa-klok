@@ -73,6 +73,7 @@ export default {
     },
     createGame({ commit }, options) {
       const { roomId, mode, limitPlayers } = options;
+
       // si on est en multi on store l'id room pour le BACK
       if (mode === "multiplayer") {
         commit("SET_ROOM_ID", roomId);
@@ -83,19 +84,19 @@ export default {
     setRoomID({ commit }, id) {
       commit("SET_ROOM_ID", id);
     },
+    setMode({ commit }, mode) {
+      commit("SET_MODE", mode);
+    },
     addPlayer({ commit }, player) {
       commit("ADD_PLAYER_TO_LIST", player);
     },
     removePlayer({ commit, state, dispatch }, playerToRemove) {
       const listePlayers = state.game.playersList;
-      console.table("playersList avant remove : ", listePlayers);
       listePlayers.forEach((player, index) => {
         if (player.id === playerToRemove.id) {
           commit("REMOVE_PLAYER_FROM_LIST", index);
         }
       });
-
-      console.table("playersList apres remove : ", listePlayers);
 
       // on lance une notif
       const notif = {

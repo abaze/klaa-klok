@@ -221,11 +221,14 @@ export default {
         // on STORE dans le tableau de toutes les mises de la partie
         this.savePlayerMise(miseToSend);
 
-        // on envoie notre mise au BACK pour que les autres players puisse lafficher sur leur board egalement
-        SocketIO.emit("player_mised", {
-          id: this.game.roomId,
-          data: miseToSend,
-        });
+        // En multi on send la mise au BACK pour broadcast aux autres players
+        if (this.game.mode === "multiplayer") {
+          // on envoie notre mise au BACK pour que les autres players puisse lafficher sur leur board egalement
+          SocketIO.emit("player_mised", {
+            id: this.game.roomId,
+            data: miseToSend,
+          });
+        }
 
         // on save la valeur de la mise en cours dans le store
         // on store la mise courante (on peut add une mise ou en retirer une)

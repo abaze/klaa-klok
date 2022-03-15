@@ -135,9 +135,7 @@ export default {
         95, 100,
       ];
       let totalMoney = cpu.totalGains;
-      console.log(
-        `Avec ses ${totalMoney} € ${cpu.name} veut miser sur ${totalFacesToMise} faces...`
-      );
+
       // on get X choix unique qui correspondent aux faces du dés (ex: CPU veut 3 mises, on random 3 uniques faces)
       const cpuChoices = new Set();
       while (cpuChoices.size !== totalFacesToMise) {
@@ -158,11 +156,7 @@ export default {
             }
           }
           totalMoney -= randomMise;
-          console.log(
-            `${cpu.name} veut miser ${randomMise}€ sur ${
-              faces[choice - 1].label
-            }...`
-          );
+
           setTimeout(() => {
             const miseToSend = {
               player: cpu,
@@ -174,31 +168,30 @@ export default {
             this.savePlayerMise(miseToSend);
           }, 1000 * Math.floor(Math.random() * 20) + 1);
         } else {
-          console.log(
-            `plus d'argent à miser sur ${faces[choice - 1].label}....`
-          );
           return 0;
         }
       });
     },
   },
   created() {
-    // Sockets ONLY in multiplayer mode
-    if (this.game.mode === "multiplayer") {
-      // on recupere du BACK, les mises adverses que le BACK nous communique
-      SocketIO.on("send_mise_adverse", ({ id, data }) => {
-        if (this.game.roomId === id) {
-          this.savePlayerMise(data);
-        }
-      });
+    this.$nextTick(() => {
+      // Sockets ONLY in multiplayer mode
+      if (this.game.mode === "multiplayer") {
+        // on recupere du BACK, les mises adverses que le BACK nous communique
+        SocketIO.on("send_mise_adverse", ({ id, data }) => {
+          if (this.game.roomId === id) {
+            this.savePlayerMise(data);
+          }
+        });
 
-      // on recupere du BACK, les mises adverses à remove
-      SocketIO.on("send_remove_mise_adverse", ({ id, data }) => {
-        if (this.game.roomId === id) {
-          this.deletePlayerMise(data);
-        }
-      });
-    }
+        // on recupere du BACK, les mises adverses à remove
+        SocketIO.on("send_remove_mise_adverse", ({ id, data }) => {
+          if (this.game.roomId === id) {
+            this.deletePlayerMise(data);
+          }
+        });
+      }
+    });
   },
 };
 </script>

@@ -70,9 +70,7 @@ io.on("connection", function (socket) {
 
   // ETAPE 1a - FRONT nous demande de stocker une new game (new room)
   socket.on("create_new_game", (room) => {
-    console.log(
-      `Le player vient de cree une new game, on push la room ${room.roomId}`
-    );
+    console.log(`Le player vient de cree une new game`, room);
     // on push la new rom
     rooms.push(room);
     // on stock l'id room (pour pouvoir verifier rapidement les rooms dispo)
@@ -157,6 +155,12 @@ io.on("connection", function (socket) {
   // ETAPE 2 - GESTION DES MISES
   // Quand un player vient de miser, on broadcast aux autres players
   socket.on("player_mised", ({ id, data }) => {
+    /*const clients = io.sockets.adapter.rooms.get(id);
+    console.log(
+      ` le player veut envoyer une mise room ${id} à ces joueurs : `,
+      clients
+    );*/
+
     socket.broadcast.to(id).emit("send_mise_adverse", { id, data });
   });
   // Quand un player vient de remove une de ses mises, on broadcast aux autres players

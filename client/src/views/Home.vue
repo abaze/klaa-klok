@@ -313,12 +313,15 @@ export default {
     createNewSalon() {
       // on store juste l'id du salon + le nombre de joueur requis pour la game
       this.createGame({
-        mode: "mutliplayer",
+        mode: "multiplayer",
         roomId: this.codeSalon,
         limitPlayers: parseInt(this.nbPlayers),
       });
       // on previent le BACK de la creation et on lui send tout le state game
       SocketIO.emit("create_new_game", this.game);
+
+      // on store le nom du player
+      this.setPlayerName(this.username);
     },
     verifCodeSalon() {
       // on demande au Back si ce code Salon existe
@@ -334,10 +337,13 @@ export default {
       });
     },
     joinSalon() {
-      // on store le roomId
-      this.setRoomID(this.codeSalon);
       // on store le nom du player
       this.setPlayerName(this.username);
+      // on store juste l'id du salon + le mode
+      this.createGame({
+        mode: "multiplayer",
+        roomId: this.codeSalon,
+      });
     },
     sendGameForm() {
       // on lance le load picto
