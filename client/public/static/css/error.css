@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&family=Atma:wght@400;600&family=Bangers&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Source+Sans+Pro:wght@300;600&display=swap");
 :root {
   --purple: rgb(81, 75, 165);
   --green: rgb(35, 177, 7);
@@ -14,8 +14,8 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: "Atma", cursive;
-  font-weight: 400;
+  font-family: "Luckiest Guy", cursive;
+  font-weight: normal;
   font-size: 20px;
 }
 
@@ -47,18 +47,18 @@ body {
   text-align: center;
   font-size: 100vh;
   color: rgba(255, 255, 255, 0.1);
-  font-family: "Bangers", cursive;
+  font-family: "Luckiest Guy", cursive;
   z-index: 0;
   -webkit-transform: translateX(-50%) translateY(0);
           transform: translateX(-50%) translateY(0);
 }
 
 #errorPage h1 {
-  font-family: "Atma", cursive;
+  font-family: "Luckiest Guy", cursive;
   font-size: 2rem;
   z-index: 1;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: normal;
 }
 
 #errorPage h2 {

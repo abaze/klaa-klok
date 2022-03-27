@@ -61,7 +61,7 @@ $size_btn_open: 75px;
 .ranking {
   align-self: flex-start;
   counter-reset: ranking;
-  font-family: $fontBangers !important;
+  font-family: $font2 !important;
 
   @include media-max(900px) {
     top: calc($size_btn_open + 10px) !important;
@@ -96,8 +96,8 @@ $size_btn_open: 75px;
     &:before {
       position: absolute;
       right: 2rem;
-      font-style: italic;
-      font-weight: 800;
+      font-family: $font1;
+      font-weight: 300;
       opacity: 0.4;
       font-size: 4rem;
       counter-increment: ranking;
@@ -119,6 +119,8 @@ $size_btn_open: 75px;
     .username {
       flex: 1;
       font-size: 1.5rem;
+      font-family: $font1;
+      font-weight: normal;
       color: #fff;
       text-align: left;
       text-transform: capitalize;
@@ -128,7 +130,8 @@ $size_btn_open: 75px;
       align-items: center;
       flex-basis: 100%;
       font-size: 1.5rem;
-      font-weight: bold;
+      font-weight: normal;
+      font-family: $font1;
       text-shadow: 0 0 #000;
       text-align: left;
       img {

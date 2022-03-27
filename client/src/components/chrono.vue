@@ -73,7 +73,8 @@ export default {
   background-image: url(../assets/board/bg.jpg);
   background-size: cover;
   background-repeat: no-repeat;
-  font-family: $fontBangers;
+  font-family: $font1;
+  font-weight: normal;
   padding: 0.25rem 1rem !important;
 
   .zone-time {

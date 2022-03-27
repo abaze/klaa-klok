@@ -97,7 +97,7 @@
       <template v-else>
         <!-- SI GAME OVER GENERAL -->
         <template v-if="isGameOver">
-          <h1 class="red">GAME OVER !</h1>
+          <h1 class="orange">GAME OVER !</h1>
           <h2>Une belle équipe de winner</h2>
           <p>...comme on les aime</p>
         </template>
@@ -144,6 +144,7 @@ export default {
       player: (state) => state.players.player,
       playersGains: (state) => state.players.playersGains,
       dicesFaces: (state) => state.dices.chosenFaces,
+      overlay: (state) => state.overlay.data,
     }),
     ...mapGetters({
       isAWinner: "games/isAWinner",
@@ -182,14 +183,14 @@ export default {
         });
       }
     },
-    isGameOver(isGameOver) {
-      if (isGameOver) {
-        this.playAudio("gameOver");
-      }
-    },
-    isAWinner(isAWinner) {
-      if (isAWinner.length > 0) {
-        this.playAudio("gameWinner");
+    overlay(isOpen) {
+      if (isOpen !== null) {
+        if (this.isGameOver) {
+          this.playAudio("gameOver");
+        }
+        if (this.isAWinner.length > 0) {
+          this.playAudio("gameWinner");
+        }
       }
     },
   },
@@ -287,10 +288,11 @@ export default {
   z-index: 5;
   align-items: center;
   justify-content: center;
-  animation: fadeIn 200ms linear;
-  font-family: $fontBangers;
+  font-family: $font2;
+  font-weight: bold;
+  animation: showIn 500ms linear;
 
-  @keyframes fadeIn {
+  @keyframes showIn {
     from {
       opacity: 0;
     }
@@ -351,6 +353,8 @@ export default {
   }
 
   .credit-restant {
+    font-family: $font1;
+    font-weight: normal;
     font-size: 2rem;
     text-shadow: 2px 2px 2px #000;
     color: yellow;
@@ -472,6 +476,27 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+
+  .content {
+    animation: scaleIn 500ms ease-in-out 200ms forwards;
+    opacity: 0;
+    transform: scale(0);
+    @keyframes scaleIn {
+      0% {
+        transform: scaleX(0) scaleY(0);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+        transform: scaleX(0.01) scaleY(1);
+      }
+      85%,
+      100% {
+        opacity: 1;
+        transform: scaleX(1) scaleY(1);
       }
     }
   }

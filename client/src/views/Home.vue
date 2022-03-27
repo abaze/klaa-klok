@@ -20,7 +20,7 @@
       <!-- SOLO MODE -->
       <template v-if="choixPlayer === 'solo'">
         <div class="screen-choice">
-          <p>Entrez votre nom</p>
+          <h2>Entrez votre nom</h2>
           <input
             v-model.trim="username"
             type="text"
@@ -54,7 +54,7 @@
           <button class="btn" @click="choixPlayer = 'new-salon'">
             Créer un nouveau Salon
           </button>
-          Ou
+          <h2>Ou</h2>
           <button class="btn" @click="choixPlayer = 'join-salon'">
             Rejoindre un Salon
           </button>
@@ -74,7 +74,7 @@
           <form @submit.prevent="sendGameForm" autocomplete="off">
             <!-- ECRAN NEW SALON -->
             <template v-if="choixPlayer === 'new-salon'">
-              <p>
+              <h2>
                 Code salon à communiquer à vos amis:<br />
                 <span class="code" :class="{ copied: codeCopied }">{{
                   codeSalon
@@ -83,8 +83,8 @@
                 <span class="btn-clipboard" title="Copier le code"
                   ><i class="fa fa-clipboard" aria-hidden="true"></i
                 ></span>
-              </p>
-              <p>Nombre de joueurs ?</p>
+              </h2>
+              <h2>Nombre de joueurs ?</h2>
               <div class="radio-choice">
                 <label class="btn-radio" for="limite_player_2">
                   <input
@@ -122,7 +122,7 @@
 
             <!-- ECRAN REJOINDRE SALON EXISTANT -->
             <template v-if="choixPlayer === 'join-salon'">
-              <p>Entrez le code salon à rejoindre :</p>
+              <h2>Entrez le code salon à rejoindre :</h2>
               <div class="align-h btn-group">
                 <input
                   v-model.trim="codeSalon"
@@ -161,7 +161,7 @@
                 (choixPlayer == 'join-salon' && isCodeSalonValid)
               "
             >
-              <p>Entrez votre nom</p>
+              <h2>Entrez votre nom</h2>
               <input
                 v-model.trim="username"
                 type="text"
@@ -192,7 +192,7 @@
         </div>
       </template>
     </div>
-    <bg-waves :color="'#1b6fc7'" :animate="true" :waveClass="'waves-home'" />
+    <bg-waves :color="'#514ba5'" :animate="true" :waveClass="'waves-home'" />
   </div>
 </template>
 
@@ -374,10 +374,10 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
-  font-family: $fontAtma;
+  font-family: $font2;
 
   .content {
-    border-radius: 32% 68% 25% 75% / 45% 48% 52% 55%;
+    border-radius: 50%;
     padding: 3rem 0.5rem;
     text-align: center;
     width: 100%;
@@ -429,7 +429,7 @@ export default {
       position: absolute;
       width: 100%;
       left: 0;
-      bottom: -5px;
+      bottom: -10px;
       font-size: 0.8rem;
     }
   }

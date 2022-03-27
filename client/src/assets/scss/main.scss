@@ -1,9 +1,8 @@
 // FONT IMPORTS
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&family=Atma:wght@400;600&family=Bangers&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Source+Sans+Pro:wght@300;600&display=swap");
 
-$fontRoboto: "Roboto", sans-serif;
-$fontAtma: "Atma", cursive;
-$fontBangers: "Bangers", cursive;
+$font1: "Luckiest Guy", cursive;
+$font2: "Source Sans Pro", sans-serif;
 
 // MIXINS
 @mixin media-max($_max-width) {
@@ -120,7 +119,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: $fontRoboto;
+  font-family: $font2;
 }
 
 // LAYOUT
@@ -132,7 +131,6 @@ body {
   flex-direction: column;
   max-width: 800px;
   min-width: 280px;
-  box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
   background-image: url(../assets/board/bg.jpg);
   background-size: 40% 100%;
   background-repeat: repeat;
@@ -212,10 +210,14 @@ h1 {
   text-align: center;
   text-transform: uppercase;
   text-shadow: 2px 2px 2px #000;
+  font-family: $font1;
+  font-weight: normal;
 }
 h2 {
   font-size: clamp(1.4em, 1.2vw, 1.9em);
   text-align: center;
+  font-family: $font2;
+  font-weight: 600;
 }
 h3 {
   font-size: clamp(0.7em, 2vw, 1.7em);
@@ -241,9 +243,10 @@ p {
   color: #fff;
   margin: 1rem auto;
   cursor: pointer;
-  font-family: $fontAtma;
-  font-weight: bold;
+  font-family: $font1;
+  font-weight: normal;
   font-size: 1.5rem;
+  text-shadow: 2px 2px 2px #000 !important;
   transition: box-shadow 250ms linear;
   text-shadow: none;
 
@@ -274,8 +277,6 @@ p {
     background-size: cover;
     background-repeat: no-repeat;
     border: 3px solid #fff;
-    font-family: $fontBangers;
-    font-weight: lighter;
     font-size: 2rem;
     animation: bounce 500ms ease-in-out infinite alternate;
     @keyframes bounce {
@@ -339,6 +340,8 @@ label.btn-radio {
     border-radius: 50%;
     background-color: transparent;
     border: 2px solid #fff;
+    font-family: $font1;
+    font-weight: normal;
     transition: background-color 200ms linear;
   }
 
@@ -355,13 +358,16 @@ input[type="text"] {
   background: #fff;
   border-radius: 10px;
   padding: 0.5rem 1.5rem;
-  color: var(--orange);
+  color: #000;
   margin: 0.2rem auto;
   text-shadow: none;
-  font-size: 1.5rem;
+  font-size: 1.49rem;
+  line-height: 1;
   font-weight: bold;
   width: 100%;
   box-sizing: border-box;
+  font-family: $font2;
+  font-weight: bold;
 
   &.good {
     border-color: var(--green);

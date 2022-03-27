@@ -320,8 +320,9 @@ export default {
           color: #fff;
           border-radius: 50%;
           opacity: 0.9;
-          font-size: 0.8rem;
-          font-weight: bold;
+          font-family: $font1;
+          font-size: 1rem;
+          font-weight: normal;
           width: 60px;
           white-space: nowrap;
           overflow: hidden;

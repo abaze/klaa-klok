@@ -1,0 +1,455 @@
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Source+Sans+Pro:wght@300;600&display=swap");
+:root {
+  --purple: rgb(81, 75, 165);
+  --green: rgb(35, 177, 7);
+  --red: rgb(185, 24, 24);
+  --orange: rgb(240, 109, 1);
+  --grey: #929ab0;
+}
+
+.purple {
+  color: var(--purple);
+}
+
+.green {
+  color: var(--green);
+}
+
+.red {
+  color: var(--red);
+}
+
+.orange {
+  color: var(--orange);
+}
+
+.grey {
+  color: var(--grey);
+}
+
+.player-1 {
+  background-color: #5fad56;
+}
+
+.player-2 {
+  background-color: #f2c14e;
+}
+
+.player-3 {
+  background-color: #f78154;
+}
+
+.player-4 {
+  background-color: #4d9078;
+}
+
+.player-5 {
+  background-color: #b4436c;
+}
+
+.player-6 {
+  background-color: #514ba5;
+}
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  min-width: 330px;
+  width: 100vw;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+#app {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+.content {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  max-width: 800px;
+  min-width: 280px;
+  background-image: url(../assets/board/bg.jpg);
+  background-size: 40% 100%;
+  background-repeat: repeat;
+  color: #fff;
+  border-radius: 20px;
+  border: 5px solid #fff;
+  padding: 1rem;
+  margin: auto;
+  text-shadow: 2px 2px 2px #000;
+  -webkit-animation: moveContent 300ms ease-in;
+          animation: moveContent 300ms ease-in;
+}
+
+@media screen and (max-width: 700px) {
+  .content {
+    border-radius: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-left: 0;
+    border-width: 2px;
+    border-right: 0;
+    padding: 0.5rem 0;
+  }
+}
+
+@-webkit-keyframes moveContent {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(-10%);
+            transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@keyframes moveContent {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(-10%);
+            transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+.box {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 0.25rem;
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+
+.orange {
+  color: var(--orange);
+}
+
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.d-flex *:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.break {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  height: 0;
+}
+
+.align-h {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.alert-msg {
+  font-size: 1.5rem;
+  color: white;
+}
+
+/** HEADER TAGS**/
+h1 {
+  font-size: clamp(1.7em, 1.5vw, 2.2em);
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 2px #000;
+  font-family: "Luckiest Guy", cursive;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: clamp(1.4em, 1.2vw, 1.9em);
+  text-align: center;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: clamp(0.7em, 2vw, 1.7em);
+  text-align: center;
+}
+
+p {
+  font-size: clamp(1em, 1vw, 1.2em);
+}
+
+/** FORMS **/
+.btn {
+  all: unset;
+  display: block;
+  background: var(--orange);
+  text-align: center;
+  text-transform: uppercase;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  padding: 0.5rem 1.5rem;
+  color: #fff;
+  margin: 1rem auto;
+  cursor: pointer;
+  font-family: "Luckiest Guy", cursive;
+  font-weight: normal;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 2px #000 !important;
+  -webkit-transition: -webkit-box-shadow 250ms linear;
+  transition: -webkit-box-shadow 250ms linear;
+  transition: box-shadow 250ms linear;
+  transition: box-shadow 250ms linear, -webkit-box-shadow 250ms linear;
+  text-shadow: none;
+}
+
+.btn.xs {
+  padding: 0.5rem;
+}
+
+.btn.good {
+  background-color: var(--green);
+}
+
+.btn.bad {
+  background-color: var(--red);
+}
+
+.btn:hover {
+  -webkit-box-shadow: 0 0 8px 0px #fff;
+          box-shadow: 0 0 8px 0px #fff;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn.glow {
+  -webkit-box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
+          box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.8);
+  background-image: url(../assets/board/bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 3px solid #fff;
+  font-size: 2rem;
+  -webkit-animation: bounce 500ms ease-in-out infinite alternate;
+          animation: bounce 500ms ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes bounce {
+  from {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  to {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+  }
+}
+
+@keyframes bounce {
+  from {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  to {
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+  }
+}
+
+.btn-link {
+  font-size: 1rem;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-group input {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.btn-group button {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.radio-choice {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+label.btn-radio {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+label.btn-radio > input {
+  all: unset;
+  width: 0;
+  height: 0;
+  position: fixed;
+  left: -10000px;
+  top: -10000px;
+}
+
+label.btn-radio input ~ span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid #fff;
+  font-family: "Luckiest Guy", cursive;
+  font-weight: normal;
+  -webkit-transition: background-color 200ms linear;
+  transition: background-color 200ms linear;
+}
+
+label.btn-radio input:checked ~ span {
+  background-color: var(--orange);
+}
+
+input[type="number"],
+input[type="text"] {
+  all: unset;
+  border: 2px solid #fff;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.5rem 1.5rem;
+  color: #000;
+  margin: 0.2rem auto;
+  text-shadow: none;
+  font-size: 1.49rem;
+  line-height: 1;
+  font-weight: bold;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: bold;
+}
+
+input[type="number"].good,
+input[type="text"].good {
+  border-color: var(--green);
+  -webkit-box-shadow: 0 0 8px 0px var(--green);
+          box-shadow: 0 0 8px 0px var(--green);
+}
+
+input[type="number"].bad,
+input[type="text"].bad {
+  border-color: var(--red);
+  -webkit-box-shadow: 0 0 8px 0px var(--red);
+          box-shadow: 0 0 8px 0px var(--red);
+}
+
+input[type="number"]:-moz-read-only,
+input[type="text"]:-moz-read-only {
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+input[type="number"]:read-only,
+input[type="text"]:read-only {
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+/*# sourceMappingURL=main.css.map */

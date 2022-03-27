@@ -16,7 +16,7 @@
           <div class="group-dices">
             <dice :face="face1" :throwDice="throwDice" key="des-1" />
             <input
-              v-if="game.mainPlayer.id === player.id"
+              v-if="game.mainPlayer.id === player.id && showBtn"
               type="button"
               value="lancez !"
               @click="goPlay"
@@ -84,6 +84,7 @@ export default {
   components: { dice },
   data() {
     return {
+      showBtn: true,
       throwDice: false,
       face1: 0,
       face2: 0,
@@ -157,6 +158,9 @@ export default {
       // le watcher va EMIT au BACK
       this.setPlayerIsReady({ value: true, player: this.player });
 
+      // on raffiche le bouton pour lancer les dés
+      this.showBtn = true;
+
       // si on est en SOLO on met à Ready True le CPU egalement
       if (this.game.mode === "solo") {
         // on met cpu a Ready
@@ -164,7 +168,11 @@ export default {
       }
     },
     goPlay(face1 = null, face2 = null) {
+      // on reinit les faces des dés dans le store
       this.resetChosenFaces();
+      // on cache le bouton une fois les dés lancés
+      this.showBtn = false;
+
       /** MODE MUTLI */
       if (this.game.mode === "multiplayer") {
         // si c'est le mainPlayer qui lance, il init les 2 value randoms des des
@@ -232,7 +240,7 @@ export default {
 
 <style lang="scss">
 .dice-area {
-  font-family: $fontAtma;
+  font-family: $font1;
   position: relative;
   width: 100%;
   height: 100%;
@@ -268,7 +276,6 @@ export default {
     background-size: 200% 200%;
     color: #fff;
     text-transform: uppercase;
-    font-weight: 900;
     text-align: center;
     border: 3px solid #fff;
     border-radius: 15px;

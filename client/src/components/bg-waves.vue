@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-waves" :class="[waveClass, { 'no-animation': !animate }]">
-    <div class="wave"></div>
+  <div class="zone-bg" :class="[waveClass, { 'no-animation': !animate }]">
+    <div class="bg"></div>
   </div>
 </template>
 
@@ -20,17 +20,37 @@ export default {
       require: true,
     },
   },
+  data() {
+    return {
+      vWidth: window.innerWidth,
+      vHeight: window.innerHeight,
+    };
+  },
   mounted() {
-    const bgWaves = document.querySelector(".bg-waves." + this.waveClass);
+    const bgWaves = document.querySelector(
+      ".zone-bg." + this.waveClass + " > .bg"
+    );
     bgWaves.style.setProperty("--wave-color", this.color);
+    if (this.vWidth >= this.vHeight) {
+      bgWaves.style.setProperty("--vWidth", this.vWidth + "px");
+    } else {
+      bgWaves.style.setProperty("--vWidth", this.vHeight + "px");
+    }
+    window.addEventListener("resize", () => {
+      this.vWidth = window.innerWidth;
+      this.vHeight = window.innerHeight;
+      if (this.vWidth >= this.vHeight) {
+        bgWaves.style.setProperty("--vWidth", this.vWidth + "px");
+      } else {
+        bgWaves.style.setProperty("--vWidth", this.vHeight + "px");
+      }
+    });
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.bg-waves {
-  --wave-color: #fff;
-
+<style lang="scss">
+.zone-bg {
   position: absolute;
   inset: 0;
   left: 0;
@@ -38,97 +58,23 @@ export default {
   bottom: 0;
   top: 0;
   z-index: -1;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  background: transparent;
-
-  .wave,
-  .wave:before,
-  .wave:after {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: var(--wave-color);
-    animation-name: waves;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-
-    @include media-max(700px) {
-      width: 150%;
-    }
-  }
-
-  .wave {
-    height: 100%;
-    filter: brightness(0.9);
-    animation-duration: 15s;
-
-    &:before {
-      content: "";
-      height: 45%;
-      filter: brightness(0.8);
-      animation-duration: 13s;
-    }
-    &:after {
-      content: "";
-      height: 15%;
-      filter: brightness(0.75);
-      animation-duration: 11s;
-    }
-
-    @keyframes waves {
-      0%,
-      100% {
-        clip-path: polygon(
-          0 8%,
-          7% 6%,
-          14% 5%,
-          21% 5%,
-          28% 6%,
-          34% 8%,
-          40% 12%,
-          46% 17%,
-          50% 20%,
-          54% 23%,
-          60% 25%,
-          66% 26%,
-          70% 26%,
-          77% 25%,
-          83% 23%,
-          89% 21%,
-          95% 19%,
-          100% 17%,
-          100% 100%,
-          0% 100%
-        );
-      }
-
-      50% {
-        clip-path: polygon(
-          0 15%,
-          9% 21%,
-          14% 23%,
-          18% 25%,
-          21% 26%,
-          30% 28%,
-          32% 28%,
-          40% 27%,
-          46% 26%,
-          52% 23%,
-          57% 19%,
-          62% 15%,
-          68% 11%,
-          73% 8%,
-          79% 6%,
-          86% 5%,
-          93% 5%,
-          100% 6%,
-          100% 100%,
-          0% 100%
-        );
+  .bg {
+    --vWidth: 0px;
+    --wave-color: #fff;
+    background: repeating-conic-gradient(
+      var(--wave-color) 0 15deg,
+      #645cce 15deg 30deg
+    );
+    width: calc(var(--vWidth) * 4);
+    height: calc(var(--vWidth) * 4);
+    animation: moveBg 200s linear infinite;
+    transform: translate(-50%, -50%);
+    @keyframes moveBg {
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
       }
     }
   }

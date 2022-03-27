@@ -222,7 +222,9 @@ export default {
         action: "results",
         data: true,
       };
-      dispatch("overlay/openOverlay", dataToOverlay, { root: true });
+      setTimeout(() => {
+        dispatch("overlay/openOverlay", dataToOverlay, { root: true });
+      }, 3000);
     },
     resetPlayersGains({ commit }) {
       // on reset le tab des playersGains
