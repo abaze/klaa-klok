@@ -77,6 +77,32 @@ Dans une seconde console, placez vous dans le repertoire **"/client"** et tapez 
 npm run serve
 ```
 
+# Deploiement
+
+## Backend
+
+Se placer dans "/server" :
+
+```bash
+# En supposant que Heroku CLI est déjà installé
+# Etape1 - connexion à mon compte Heroku
+$ heroku login
+
+# Etape2 - lier notre local à notre app sur Heroku
+$ heroku git:remote -a mon-app-sur-heroku
+
+# Etape3 - Commit de toutes les modifs
+$ git add .
+$ git commit -m "mon message du commit"
+
+# Etape4 - Push sur le projet remote
+git push heroku main
+```
+
+## Frontend
+
+Simple commit/push sur le repos Github
+
 <br>
 
 <h2 align="center">
