@@ -73,9 +73,6 @@ Dans une seconde console, placez vous dans le repertoire **"/client"** et tapez 
 npm run serve
 ```
 
----
-
-<br>
 <br>
 
 <h2 align="center">
