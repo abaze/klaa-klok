@@ -18,7 +18,7 @@ On y joue à l'aide de 2 dés sur lesquels sont représentés :
 <li>une Crevette</li>
 <li>un Coq</li>
 </ul>
-<p>Les joueurs misent de l'argent sur les 6 faces du plateau, leur gain est déterminé par les faces retournées par les dés. Si l'une des faces correspond à l'image choisi, le joueur remporte le montant misé sur celle-ci. Si les 2 faces correspondent au mises du joueur, il remporte les 2 mises correspondantes. Toutes les mises n'ayant aucune correspondance avec les dés, sont perdues
+<p>Les joueurs misent de l'argent sur les 6 faces du plateau, leur gain est déterminé par les faces retournées par les dés. Si l'une des faces correspond à l'image choisie, le joueur remporte le montant misé sur celle-ci. Si les 2 faces correspondent au mises du joueur, il remporte les 2 mises correspondantes. Toutes les mises n'ayant aucune correspondance avec les dés, sont perdues
 </p>
 
 ![Formulaire de mise](/client/public/img/screen/mise.jpg "Formulaire de mise")
@@ -38,7 +38,7 @@ Deux modes de jeu sont disponibles , le <strong>mode Solo</strong> (1 player vs 
 
 Le Back est composé d'un serveur <strong>Express</strong> et de la libraire <strong>SocketIO</strong> (permettant la gestion multijoueur en écoutant les évenements des joueurs connectés)
 
-Le Back n'est sollicité que pour le mode **Multijoueur**, il s'occupe de broadcaster les données des joueurs d'un salon afin de permettre la mise à jour en temps réels de l'avancée de la partie (scores, lancement des dés...)
+Le Back n'est sollicité que pour le mode **Multijoueur**, il s'occupe de broadcaster les données des joueurs d'un salon afin de permettre la mise à jour en temps réel de l'avancée de la partie (scores, lancement des dés...)
 
 ## Frontend
 
