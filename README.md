@@ -77,4 +77,7 @@ npm run serve
 
 <br>
 <br>
-<h2 align="center">Bon jeu à vous !</h2>
+
+<h2 align="center">
+Vous pouvez tester la <a href="https://klaa-klok.netlify.app/" target="_blank">démo en ligne</a>
+</h2>
