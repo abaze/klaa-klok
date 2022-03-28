@@ -91,6 +91,12 @@ export default {
   mounted() {
     // on init les sons du jeu
     this.initAudios();
+
+    // si au chargement on ne trouve pas de player, on redirige vers une 404
+    // pour prevent les refresh de la page en cours de jeu
+    if (this.player.name === null) {
+      this.router.push("/notfound");
+    }
   },
 };
 </script>

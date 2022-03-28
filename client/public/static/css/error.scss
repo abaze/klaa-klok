@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&family=Atma:wght@400;600&family=Bangers&display=swap");
+// FONT IMPORTS
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Source+Sans+Pro:wght@300;600&display=swap");
 
-$font2: "Roboto", sans-serif;
-$font1: "Atma", cursive;
-$font2: "Bangers", cursive;
+$font1: "Luckiest Guy", cursive;
+$font2: "Source Sans Pro", sans-serif;
 
 :root {
   --purple: rgb(81, 75, 165);
@@ -42,13 +42,14 @@ body {
     text-align: center;
     font-size: 100vh;
     color: rgba(255, 255, 255, 0.1);
-    font-family: $font2;
+    font-family: $font1;
+    font-weight: normal;
     z-index: 0;
     transform: translateX(-50%) translateY(0);
   }
 
   h1 {
-    font-family: $font1;
+    font-family: $font2;
     font-size: 2rem;
     z-index: 1;
     text-transform: uppercase;
@@ -56,6 +57,7 @@ body {
   }
 
   h2 {
+    font-family: $font2;
     font-weight: 400;
   }
 
@@ -73,6 +75,7 @@ body {
     cursor: pointer;
     transition: box-shadow 250ms linear;
     z-index: 1;
-    font-weight: 600;
+    font-family: $font1;
+    font-weight: normal;
   }
 }

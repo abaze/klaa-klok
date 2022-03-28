@@ -23,6 +23,20 @@ export default {
     INIT_GAME_DATA(state, data) {
       state.game = data;
     },
+    RESET_GAME_DATA(state) {
+      state.game = {
+        mode: null,
+        roomId: null,
+        limitPlayers: null,
+        gameNumber: 0,
+        gameOver: false,
+        isWinner: false,
+        allPlayersAreHere: false,
+        gameIsReady: false,
+        mainPlayer: {},
+        playersList: [],
+      };
+    },
     SET_GAME_NUMBER(state, num) {
       state.game.gameNumber = num;
     },
@@ -70,6 +84,9 @@ export default {
   actions: {
     initGame({ commit }, data) {
       commit("INIT_GAME_DATA", data);
+    },
+    resetGame({ commit }) {
+      commit("RESET_GAME_DATA");
     },
     createGame({ commit }, options) {
       const { roomId, mode, limitPlayers } = options;
@@ -226,6 +243,7 @@ export default {
         state.game.playersList.forEach((player) => {
           if (player.totalGains > 0) {
             playersAlive.push({
+              id: player.id,
               name: player.name,
               gains: player.totalGains,
             });

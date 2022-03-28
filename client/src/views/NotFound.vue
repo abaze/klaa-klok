@@ -10,11 +10,15 @@
 <script>
 import { reactive, toRefs } from "vue";
 import { useRouter, useRoute } from "vue-router";
-
-import bgWaves from "../components/bg-waves.vue";
+import { mapActions } from "vuex";
 export default {
-  component: { bgWaves },
   name: "NotFound",
+  methods: {
+    ...mapActions({
+      destroyAudios: "audios/destroyAudios",
+      resetGame: "games/resetGame",
+    }),
+  },
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -33,7 +37,11 @@ export default {
       goToPreviousPage,
     };
   },
+  mounted() {
+    this.resetGame();
+    this.destroyAudios();
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>

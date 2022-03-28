@@ -184,12 +184,21 @@ export default {
       }
     },
     overlay(isOpen) {
+      // A louverture de la popup
       if (isOpen !== null) {
+        // si GameOver on joue le son de la defaite
         if (this.isGameOver) {
           this.playAudio("gameOver");
         }
+        // Si il y a un gagnant...
         if (this.isAWinner.length > 0) {
-          this.playAudio("gameWinner");
+          // si c'est moi, je joue la musique de la victoire
+          if (this.isAWinner.id === this.player.id) {
+            this.playAudio("gameWinner");
+          } else {
+            // Sinon on joue le son de la défaite
+            this.playAudio("gameOver");
+          }
         }
       }
     },

@@ -56,7 +56,6 @@ export default {
       state.audios = [];
     },
     muteAllAudios({ state }, mute) {
-      console.log("on va mettre à mute : " + mute);
       const allAudios = state.audios;
       allAudios.forEach((sound, index) => {
         state.audios[index].audio.muted = mute;
@@ -112,7 +111,6 @@ export default {
       dispatch("setLoopAudio", { label: "timer", loop: true });
 
       /** PLAY GAME SOUND (musique de fond) */
-      console.log("on va jouer audio game");
       dispatch("playAudio", "game");
     },
   },
