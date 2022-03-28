@@ -38,13 +38,17 @@ Deux modes de jeu sont disponibles , le <strong>mode Solo</strong> (1 player vs 
 
 Le Back est composé d'un serveur <strong>Express</strong> et de la libraire <strong>SocketIO</strong> (permettant la gestion multijoueur en écoutant les évenements des joueurs connectés)
 
-Le Back n'est sollicité que pour le mode **Multijoueur**, il s'occupe de broadcaster les données des joueurs d'un salon afin de permettre la mise à jour en temps réel de l'avancée de la partie (scores, lancement des dés...)
+Le Back n'est sollicité que pour le mode **Multijoueur**, il s'occupe de broadcaster les données des joueurs d'un salon afin de permettre la mise à jour en temps réel de l'avancée de la partie (scores, lancement des dés...).
+
+Le Back est déployé via un serveur Heroku.
 
 ## Frontend
 
 Le Front repose sur le framework **VueJS** et la libraire **SocketIO** pour faire le pont avec le Back.
 
 Les données, des joueurs et de la partie, sont gérées par le **Store** et sont ensuite redistribuées via **SocketIO** qui se gère de la propagation à tout le salon.
+
+Le Front est hebergé sur la plateforme Netlify.
 
 ## Progressive Web App
 
